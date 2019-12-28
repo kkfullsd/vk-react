@@ -4,7 +4,7 @@ export default class GroupsSearch extends React.Component {
 
     state = {
         param: {
-            q: " ",
+            q: [],
             type: "group",
             country_id: 1,
             city_id: 1,
@@ -12,21 +12,55 @@ export default class GroupsSearch extends React.Component {
             count: 1000,
             v: "5.73",
         },
-        output: null,
+        output: [],
     }
 
     qHandler = (value) => {
-        this.setState({param:{q:value}})
+        const q = value.split(',')
+        this.setState({param:{q:q}})
     }
 
     searchGroups = () => {
-        window.VK.Api.call('groups.search', {q: this.state.param.q, count: 1000, v:'5.73'},  (r) => {
+        for (let q of this.state.param.q) {
+        window.VK.Api.call('groups.search', {q: q, count: 1000, v:'5.73'},  (r) => {
             if(r.response) {
                 console.log(r.response)
-                this.setState({output: r.response})
+
+                this.setState({
+                    output: this.state.output.concat(r.response.items)
+                })
+
+                console.log('state: ', this.state.output)
+
+
             } 
         } )
     }
+
+
+
+    }
+
+    groupsList = () => {
+
+        return (
+        this.state.output.map((group)=>{
+            return (
+                "\n https://vk.com/" + group.screen_name
+            )
+        }))
+
+
+        
+        
+       
+        
+    }
+
+    
+       
+        
+    
 
 
     render() {
@@ -36,16 +70,22 @@ export default class GroupsSearch extends React.Component {
                 <input onChange={(event) => this.qHandler(event.target.value)} placeholder="Ключевое слово"/>
                 <button onClick={this.searchGroups}> Найти группы </button>
 
-                <div style={{width:'400px', height: "500px", overflowY:'scroll', border:'1px solid gray', margin:'10px auto', textAlign:'left'}}> 
-                    {this.state.output ? this.state.output.items.map((id, index) => {
-                    return (
-                        <div key={index}>
-                      https://vk.com/public{id.id}
-                        </div>
-                    )
-                }) : ""}
-                
+                <div>
+                   {this.state.output.length !== 0 ? <h3>Всего найдено групп: {this.state.output.length} </h3> : null } 
                 </div>
+
+                <div>
+                    <textarea
+                        readOnly
+                        value={this.groupsList()}
+                        rows='30'
+                        cols='50'
+                     />
+                </div>
+
+                
+
+
             </div>
         )
     }

@@ -1,53 +1,51 @@
 import React from 'react';
 import './App.css';
 import GroupsSearch from './GroupsSearch/GroupsSearch';
+import { Route, Switch, NavLink } from 'react-router-dom'
 
 export default class App extends React.Component {
 
   state = {
-    output: null,
+    loginStatus: 'unknow', 
   }
 
   authVk() {
     window.VK.Auth.login(()=>{console.log('logged')})
   }
 
-  // showCall = () => {
-  //   window.VK.Api.call('groups.search',{q: 'Бурятия', v:'5.73'}, (r) => {
-  //     if(r.response) {
-  //       console.log(r.response)
-  //       this.setState({
-  //         output: r.response.items
-  //       })
-  //     }
-  //   })
-  // }
+  componentDidMount() {
+    window.VK.Auth.getLoginStatus((data)=>{
+      this.setState({loginStatus:data.status})
+    })}
 
-  
 
 
   render() {
-    // let output = null;
 
-    // if (this.state.output) {
-    //   output = this.state.output.map((id, index)=> {
-    //     return (
-    //       <div>
-    //         {index+1}:{id.id}
-    //       </div>
-    //     )
-    //   })
-    // }
 
     return (
       <div className="App">
       <h1>VK</h1>
+       
+      
+      {this.state.loginStatus === 'connected' ? 
+      <nav>
+        <NavLink to='/groupssearch'>
+          Поиск групп по параметрам
+        </NavLink>
+      </nav> :
       <button onClick={this.authVk}>Войти VK</button>
-      <GroupsSearch />
-      {/* <button onClick={this.showCall}>Show Call</button> */}
-      {/* <h2>Всего Найдено: {this.state.output ? (this.state.output instanceof Array) ? this.state.output.length : '0' : '0'}</h2> */}
-      {/* {output} */}
+
+      }
+      
+
+
+      <Switch>
+        <Route path='/groupssearch' component={GroupsSearch} exact />
+        {/* <Route path='/' component={GroupsSearch} exact /> */}
+      </Switch>
     
+      
       </div>
     );
 
