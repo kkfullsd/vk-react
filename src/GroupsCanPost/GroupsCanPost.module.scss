@@ -1,0 +1,36 @@
+.container {
+    label {
+        color: white;
+        margin: 10px;
+    }
+    textarea {
+        display: block;
+        width: 500px;
+        height: 150px;
+        margin: 10px auto;
+    }
+
+    .sortButton {
+        padding: 10px;
+        color: black;
+        background-color: #F2CA7E;
+        outline: none;
+        border-radius: 5px;
+
+    }
+
+    .counter {
+        color: white;
+    }
+    .result {
+        margin: 10px auto;
+        padding: 10px;
+        width: 500px;
+        height:200px;
+        border: 1px solid #273459;
+        text-align: left;
+        overflow-y: scroll;
+        background-color: whitesmoke;   
+    }
+
+}
