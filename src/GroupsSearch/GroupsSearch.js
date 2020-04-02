@@ -20,7 +20,14 @@ export default class GroupsSearch extends React.Component {
         output: [],
         loading: false,
         valid: true,
+        counter: 0,
+        counter2: 0,
+        finalOutput: [],
+        filter: {
+            canPost: false
+        }
     }
+
 
     
 
@@ -29,8 +36,6 @@ export default class GroupsSearch extends React.Component {
         this.setState({
             valid: true
         })
-
-        console.log(value, this.state.param.q)
         
         let state = {...this.state}
         state.param.q = value.split(',')
@@ -46,7 +51,7 @@ export default class GroupsSearch extends React.Component {
             })
         } else {
 
-            if (this.state.output.length === 0) {
+            if (this.state.finalOutput.length === 0 && this.state.output.length === 0) {
                 this.setState({
                     loading: true
                 })
@@ -54,31 +59,159 @@ export default class GroupsSearch extends React.Component {
                 const stateStamp = this.state.output
     
                 setTimeout(()=>
-                    stateStamp === this.state.output ? this.searchGroups() : null
-                , 2000)
-        
-                for (let q of this.state.param.q) {
-                window.VK.Api.call('groups.search', {q: q, type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
+                    stateStamp === this.state.output ? this.searchGroups() : null 
+                , 4000)
+        ///////// ЗОНА ЭКСПЕРИМЕНТОВ
+
+        let p = () =>{
+
+            let iterate = (counter) => {
+                window.VK.Api.call('groups.search', {q: this.state.param.q[counter], type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
                     if(r.response) {
-                     
-                        this.setState((prevState)=>{
-                            return {
-                                output: prevState.output.concat(r.response.items)
+                        
+                        r.response.items.map(group=>{
+                            this.setState({
+                                output: this.state.output.concat(group.screen_name)
+                            })
+                        })
+                        if (counter === this.state.param.q.length - 1) {
+                            filterGroups()
+                            this.setState({counter: 0})
+                        } 
+                        if (counter < this.state.param.q.length - 1) {
+                            this.setState({
+                                counter: this.state.counter + 1, 
+                            })
+                            setTimeout(()=>{
+                                iterate(this.state.counter)
+                            }, 2500)
+                        }
+
+                    } else {
+                        this.setState({
+                            counter: this.state.counter + 1, 
+                        })
+                        setTimeout(()=>{
+                            iterate(this.state.counter)
+                        }, 2500)
+                    }
+                })
+            }
+
+            iterate(this.state.counter)
+
+            
+            
+        }
+
+        let filterGroups = () =>{
+        
+             let filter = (counter) => { 
+                console.log('итерация фильтра: ', counter)
+                let istart = counter*500
+                let ifinish = istart+500
+
+                let groups = this.state.output.slice(istart, ifinish).join(',')
+                if(counter < Math.floor(this.state.output.length / 500)) {
+                window.VK.Api.call('groups.getById', {group_ids: groups, fields: 'can_post', v:'5.73' }, (r)=>{
+                    if (r.response) {                                      
+                        r.response.map((group)=>{
+                            if (group.can_post === 1) {
+                                this.setState(prevState=>{
+                                    prevState.finalOutput.push(group)
+                                    return prevState
+                                })
                             }
                         })
-    
-                        this.setState({loading: false})
-        
                     } 
+                    this.setState({counter2: this.state.counter2 + 1})
+                    setTimeout(()=>{
+                        filter(this.state.counter2)
+                    }, 1500)
+                }) } else {
+                    console.log('finally!!!!', this.state.finalOutput)
+                    this.setState({
+                        loading:false,
+                        counter: 0,
+                        counter2: 0,
+                        output: []
+                    })
                 }
+            }
+
+            if (this.state.filter.canPost) {
+                filter(this.state.counter2)
+            } else {
+                this.state.output.map((screen_name)=>{
+                    let obj = new Object()
+                    obj.screen_name = screen_name
+                    
+                    this.setState((prevState)=>{
+                        prevState.finalOutput.push(obj)
+                        return prevState
+                    })
+                })
+                this.setState({
+                    loading:false,
+                    counter: 0,
+                    counter2: 0,
+                    output: []
+                })
                 
-                ) }
+                console.log(this.state.finalOutput)
+            }
 
 
+
+            
+        }
+
+        p()
+
+        // p.then(data=>{
+        //     console.log(data)
+        // })
+                
+                // for (let q of this.state.param.q) {
+                // window.VK.Api.call('groups.search', {q: q, type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
+                //     if(r.response) {
+                     
+                //         // this.setState((prevState)=>{
+                //         //     return {
+                //         //         output: prevState.output.concat(r.response.items)
+                //         //     }
+                //         // })
+
+                //         console.log('первый респонс')
+
+                //         r.response.items.map((group)=>{
+                //             window.VK.Api.call('groups.getById', {group_ids: group.id, fields: 'can_post', v:'5.73' }, (r)=>{
+                //                 if (r.response) {
+                //                     console.log('второй респонс')
+                //                     if (r.response[0].can_post === 1) { //Любое крутое условие!!!!
+                //                         this.setState((prevState)=>{
+                //                                 return {
+                //                                     output: prevState.output.concat(group)
+                //                                 }
+                //                             })
+                //                     }
+                //                 } 
+                //             })
+                //         })
+    
+                //         this.setState({loading: false})
+        
+                //     } 
+                // }
+                
+                // ) }
+
+        ////////// ЗОНА ЭКСПЕРИМЕНТОВ 
             } else {
 
                 this.setState({
-                    output:[]
+                    output:[],
+                    finalOutput: [],
                 })
 
                 setTimeout(()=>{
@@ -100,12 +233,12 @@ export default class GroupsSearch extends React.Component {
 
 
     groupsList = () => {
-        if (this.state.output.length > 0) {
+        if (this.state.finalOutput.length > 0 && this.state.loading === false) {
 
         return (
         <div className={classes.output}>
-        <CopyButton className={classes.copyButton} output={this.state.output} >Скопировать все</CopyButton>
-            {this.state.output.map((group, index)=>{
+        <CopyButton className={classes.copyButton} output={this.state.finalOutput} >Скопировать все</CopyButton>
+            {this.state.finalOutput.map((group, index)=>{
                 return (
                     <div key={index}>
                     {"https://vk.com/" + group.screen_name}
@@ -116,7 +249,15 @@ export default class GroupsSearch extends React.Component {
         ) 
         } else {
             if (this.state.loading) {
-                return <div className={loader.loader}></div>
+                return (
+                    <div>
+                <div className={loader.loader}></div>
+
+                <div><h4>{this.state.counter !==0 ? ((this.state.counter  / this.state.param.q.length)*100).toFixed(2) + '% - поиск групп' : null}</h4></div>
+
+                <div><h4>{this.state.counter2 !==0 ? ((this.state.counter2  / Math.floor(this.state.output.length / 500))*100).toFixed(2) + '% - фильтр по параметрам' : null}</h4></div>
+                </div>
+                )
             }
         }
 
@@ -178,6 +319,20 @@ export default class GroupsSearch extends React.Component {
                     </select>
                 </div>
 
+                <div className={classes.control}>
+
+                    <input type='checkbox' onChange={()=>{
+                        this.setState(prevState=>{
+                            prevState.filter.canPost = !prevState.filter.canPost
+                            return prevState
+                        })
+                        console.log(this.state.filter.canPost)
+                    }
+                    } />
+
+                    <label htmlFor='canPost'>Только группы с открытой стеной</label>
+                </div>
+
                 {this.state.loading ? null : 
                     <div>
                         <button className={classes.searchButton} onClick={this.searchGroups}> Найти группы </button>
@@ -186,7 +341,7 @@ export default class GroupsSearch extends React.Component {
                 
 
                 <div>
-                   {this.state.output.length !== 0 ? <h3>Всего найдено групп: {this.state.output.length} </h3> : null } 
+                   {this.state.finalOutput.length !== 0 && this.state.loading === false ? <h3>Всего найдено групп: {this.state.finalOutput.length} </h3> : null } 
                 </div>
 
                 

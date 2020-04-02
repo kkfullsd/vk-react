@@ -4,26 +4,16 @@ const CountrySelect = props => {
 
    let [countries, changeCountries] = useState([])
 
-   let getCountries = () => {
-
-            window.VK.Api.call('database.getCountries', {need_all: 0, v:'5.73'}, (r)=>{
-                if(r.response){
-                    changeCountries(r.response.items)
-                } 
-            })
-      
-        
-    }
-
-    //getCountries()
+   
 
     useEffect(()=>{
-        console.log('useEffect')
+        if (countries.length === 0) {
         window.VK.Api.call('database.getCountries', {need_all: 0, v:'5.73'}, (r)=>{
             if(r.response){
                 changeCountries(r.response.items)
             } 
         })
+    }
     })
 
     return (
