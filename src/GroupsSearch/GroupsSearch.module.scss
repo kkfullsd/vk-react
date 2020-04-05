@@ -7,7 +7,7 @@
 
     .control {
         margin: 5px;
-
+    
         label {
             display: block;
             color: white;
@@ -29,7 +29,21 @@
             height: 25px;
         }
 
+        
+       
 
+        
+       
+
+
+    }
+
+    .control:last-child {
+       
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .searchButton {
@@ -67,4 +81,19 @@
     position: relative;
     width: 250px;
     height: 25px;
+}
+
+.checkgroup {
+    input[type=checkbox] {
+        width: 40px;
+        margin: 0;
+        display: inline;
+    }
+    display: flex;
+    flex-direction: row;
+    margin: 5px;
+
+    label {
+        color: white;
+    }
 }

@@ -24,7 +24,9 @@ export default class GroupsSearch extends React.Component {
         counter2: 0,
         finalOutput: [],
         filter: {
-            canPost: false
+            canPost: false,
+            min: 0,
+            max: 999999999,
         }
     }
 
@@ -68,8 +70,7 @@ export default class GroupsSearch extends React.Component {
             let iterate = (counter) => {
                 window.VK.Api.call('groups.search', {q: this.state.param.q[counter], type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
                     if(r.response) {
-                        
-                        r.response.items.map(group=>{
+                        r.response.items.forEach(group=>{
                             this.setState({
                                 output: this.state.output.concat(group.screen_name)
                             })
@@ -84,14 +85,14 @@ export default class GroupsSearch extends React.Component {
                             })
                             setTimeout(()=>{
                                 iterate(this.state.counter)
-                            }, 2500)
+                            }, 1500)
                         }
 
                     } else {
                         this.setState({
                             counter: this.state.counter + 1, 
                         })
-                        setTimeout(()=>{
+                       setTimeout(()=>{
                             iterate(this.state.counter)
                         }, 2500)
                     }
@@ -113,10 +114,13 @@ export default class GroupsSearch extends React.Component {
 
                 let groups = this.state.output.slice(istart, ifinish).join(',')
                 if(counter < Math.floor(this.state.output.length / 500)) {
-                window.VK.Api.call('groups.getById', {group_ids: groups, fields: 'can_post', v:'5.73' }, (r)=>{
+                window.VK.Api.call('groups.getById', {group_ids: groups, fields: 'can_post,members_count', v:'5.73' }, (r)=>{
                     if (r.response) {                                      
-                        r.response.map((group)=>{
-                            if (group.can_post === 1) {
+                        r.response.forEach((group)=>{
+                            if (group.can_post == this.state.filter.canPost
+                                 && group.members_count > this.state.filter.min
+                                 && group.members_count < this.state.filter.max
+                                 ) {
                                 this.setState(prevState=>{
                                     prevState.finalOutput.push(group)
                                     return prevState
@@ -130,6 +134,7 @@ export default class GroupsSearch extends React.Component {
                     }, 1500)
                 }) } else {
                     console.log('finally!!!!', this.state.finalOutput)
+                    if (this.state.finalOutput.length === 0) {window.alert('По такому запросу групп не найдено')}
                     this.setState({
                         loading:false,
                         counter: 0,
@@ -139,27 +144,27 @@ export default class GroupsSearch extends React.Component {
                 }
             }
 
-            if (this.state.filter.canPost) {
-                filter(this.state.counter2)
-            } else {
-                this.state.output.map((screen_name)=>{
-                    let obj = new Object()
-                    obj.screen_name = screen_name
-                    
-                    this.setState((prevState)=>{
-                        prevState.finalOutput.push(obj)
-                        return prevState
-                    })
-                })
-                this.setState({
-                    loading:false,
-                    counter: 0,
-                    counter2: 0,
-                    output: []
-                })
-                
-                console.log(this.state.finalOutput)
-            }
+                    if (this.state.filter.canPost) {
+                        filter(this.state.counter2)
+                    } else {
+                        this.state.output.forEach((screen_name)=>{
+                            let obj = {}
+                            obj.screen_name = screen_name
+
+                            this.setState((prevState)=>{
+                                prevState.finalOutput.push(obj)
+                                return prevState
+                            })
+                        })
+                        this.setState({
+                            loading:false,
+                            counter: 0,
+                            counter2: 0,
+                            output: []
+                        })
+                        
+                        console.log(this.state.finalOutput)
+                    }
 
 
 
@@ -167,44 +172,6 @@ export default class GroupsSearch extends React.Component {
         }
 
         p()
-
-        // p.then(data=>{
-        //     console.log(data)
-        // })
-                
-                // for (let q of this.state.param.q) {
-                // window.VK.Api.call('groups.search', {q: q, type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
-                //     if(r.response) {
-                     
-                //         // this.setState((prevState)=>{
-                //         //     return {
-                //         //         output: prevState.output.concat(r.response.items)
-                //         //     }
-                //         // })
-
-                //         console.log('первый респонс')
-
-                //         r.response.items.map((group)=>{
-                //             window.VK.Api.call('groups.getById', {group_ids: group.id, fields: 'can_post', v:'5.73' }, (r)=>{
-                //                 if (r.response) {
-                //                     console.log('второй респонс')
-                //                     if (r.response[0].can_post === 1) { //Любое крутое условие!!!!
-                //                         this.setState((prevState)=>{
-                //                                 return {
-                //                                     output: prevState.output.concat(group)
-                //                                 }
-                //                             })
-                //                     }
-                //                 } 
-                //             })
-                //         })
-    
-                //         this.setState({loading: false})
-        
-                //     } 
-                // }
-                
-                // ) }
 
         ////////// ЗОНА ЭКСПЕРИМЕНТОВ 
             } else {
@@ -267,10 +234,13 @@ export default class GroupsSearch extends React.Component {
     uniSelectHandler = event => {
         let state = {...this.state}
         state.param[event.target.name] = event.target.value
-
         this.setState({state})
+        }
 
-        console.log(this.state)
+    minMaxHandler = event => {
+        let state = {...this.state}
+        state.filter[event.target.name] = +event.target.value
+        this.setState({state})
     }
 
     
@@ -318,8 +288,17 @@ export default class GroupsSearch extends React.Component {
                         <option value='5'>сортировать по отношению количества записей в обсуждениях к количеству пользователей</option>
                     </select>
                 </div>
+                <div className={classes.control} >
+                <label htmlFor='min'>Минимум участников:</label>
+                <input type='number' id='min' name='min' placeholder={this.state.filter.min} onChange={(event)=>this.minMaxHandler(event)} /> 
 
-                <div className={classes.control}>
+                <label htmlFor='max'>Максимум участников:</label>
+                <input type='number' id='max' name='max' placeholder={this.state.filter.max} onChange={(event)=>this.minMaxHandler(event)}/>
+                    
+
+                </div>
+
+                <div className={classes.checkgroup}>
 
                     <input type='checkbox' onChange={()=>{
                         this.setState(prevState=>{
@@ -330,7 +309,7 @@ export default class GroupsSearch extends React.Component {
                     }
                     } />
 
-                    <label htmlFor='canPost'>Только группы с открытой стеной</label>
+                    <label htmlFor='canPost'>Только с открытой стеной</label>
                 </div>
 
                 {this.state.loading ? null : 
