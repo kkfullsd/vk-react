@@ -4,6 +4,7 @@ import GroupsSearch from './GroupsSearch/GroupsSearch';
 import { Route, Switch, NavLink } from 'react-router-dom'
 import GropsCanPost from './GroupsCanPost/GroupsCanPost';
 import BroBotList from './BroBotList/BroBotList'
+import ParsGroupMembers from './ParsGroupMembers/ParsGroupMembers';
 
 export default class App extends React.Component {
 
@@ -42,8 +43,8 @@ export default class App extends React.Component {
         <NavLink className={classes.NavLink} to='/brobotlist'>
           Сформировать список для БроБота
         </NavLink>
-        <NavLink className={classes.NavLink} to='/groupscanpost'>
-          Пересечения участников групп
+        <NavLink className={classes.NavLink} to='/parsgroupmembers'>
+          Все участники групп
         </NavLink>
 
       </nav> :
@@ -57,6 +58,7 @@ export default class App extends React.Component {
         <Route path='/groupssearch' component={GroupsSearch} exact />
         <Route path='/groupscanpost' component={GropsCanPost} exact />
         <Route path='/brobotlist' component={BroBotList} exact />
+        <Route path='/parsgroupmembers' component={ParsGroupMembers} exact />
 
         {/* <Route path='/' component={GroupsSearch} exact /> */}
       </Switch>
