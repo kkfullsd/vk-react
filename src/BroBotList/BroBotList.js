@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import classes from './BroBotList.module.scss'
+import CopyButton from '../ui/CopyButton/CopyButton'
 
 let BroBotList = () => {
 
@@ -48,6 +49,7 @@ let BroBotList = () => {
 
 
             <div className={classes.output}>
+            <CopyButton output={output} />
                 {output.length > 0 ? output.map((str, index)=>{
                     return(
                         <div key={index}>

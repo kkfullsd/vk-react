@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import classes from './CopyButton.module.scss'
 
 export default props => {
 
@@ -8,8 +9,13 @@ export default props => {
 
         let data = ''
 
+        
         props.output.map((group)=>{
-            data = data + "https://vk.com/" + group.screen_name + "\n"
+            if (group.screen_name) {
+                data = data + "https://vk.com/" + group.screen_name + "\n"
+            } else {
+                data = data + "https://vk.com/" + group+ "\n"
+            }
         })
    
         window.navigator.clipboard.writeText(data)
@@ -26,8 +32,8 @@ export default props => {
         <>
         {
         isCopied ?
-        <button disabled className={props.className}>Скопировано в буфер обмена</button> : 
-        <button onClick={copy} className={props.className}>Скопировать все в буффер обмена</button> 
+        <button disabled className={classes.CopyButton}>Скопировано в буфер обмена</button> : 
+        <button onClick={copy} className={classes.CopyButton}>Скопировать все в буффер обмена</button> 
         }
         
         </>

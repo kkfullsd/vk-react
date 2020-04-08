@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import classes from './ParsGroupMembers.module.scss'
 import loader from '../ui/loader/loader.module.scss'
+import CopyButton from '../ui/CopyButton/CopyButton'
 
 let ParsGroupMembers = props => {
 
     const [state, changeState] = useState([])
-    const [state2, changeState2] = useState([])
     const [output, changeOutput] = useState([])
     const [isValid, changeIsValid] = useState(true)
     const [isLoading, changeIsLoading] = useState(false)
-
-   // const [counter, changeCounter] = useState(0)
-    const [aimer, changeAimer] = useState(0)
-
-
 
     let search = (q, func) => {
 
@@ -52,6 +47,7 @@ let ParsGroupMembers = props => {
                     innerStarter()
                 } else {
                     changeIsLoading(false)
+                    
                 }
             })
         }
@@ -63,14 +59,17 @@ let ParsGroupMembers = props => {
 
 
 
-
-
     let filter = () => {
         if (state.length !== 0) {
+            changeIsValid(true)
+            let funct = output !==[] ? changeOutput([]) : null
+
             let qs = []
             state.forEach((group)=>{
                 let q = group.startsWith('https://vk.com/club') ? group.slice(19) : group.slice(15)
-                qs.push(q)
+                if (!(q === '' || q === ' ' || q === '\n')) {
+                    qs.push(q)
+                } 
             })
             starter(qs)
 
@@ -79,11 +78,28 @@ let ParsGroupMembers = props => {
         }   
     }
 
+    let flipFlop = () => {
+        if(output.length > 0 && !isLoading) {
+            let arr = []
+            let set = new Set(output)
+            set.forEach(el=>arr.push(el))
+            console.log('flipped flopeed')
+            return arr
+        }
+    }
+
+    useEffect(()=>{
+        if (state.length !== 0) {
+            changeIsValid(true) }
+    })
+
+    let style = isValid ? null : classes.error
 
     return (
         <div className={classes.main}>
+            <div className={classes.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, его id будет упомянут 1 раз. </div>
             <label htmlFor='textarea'>Список адресов сообществ по 1 ссылке на строку</label>
-            <textarea id='textarea' name='textarea' className={classes.textarea}
+            <textarea id='textarea' name='textarea' className={`${classes.textarea} ${style}`}
                 onChange={(e)=>{
                     changeState(e.target.value.split('\n'))
                 }}
@@ -100,8 +116,12 @@ let ParsGroupMembers = props => {
             
                 {output.length === 0 || isLoading ? 
                     null :
+                    <>
+                    <br></br>
+                    <label>Найдено участников: {flipFlop().length}</label>
                     <div className={classes.output}>
-                        {output.map((id, index)=>{
+                    <CopyButton output={flipFlop()} />
+                        {flipFlop().map((id, index)=>{
                             return(
                                 <div key={index}>
                                     https://vk.com/id{id}
@@ -109,6 +129,7 @@ let ParsGroupMembers = props => {
                             )
                         })}
                     </div>
+                    </>
                 }
 
             
