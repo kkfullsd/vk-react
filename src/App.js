@@ -5,6 +5,7 @@ import { Route, Switch, NavLink } from 'react-router-dom'
 import GropsCanPost from './GroupsCanPost/GroupsCanPost';
 import BroBotList from './BroBotList/BroBotList'
 import ParsGroupMembers from './ParsGroupMembers/ParsGroupMembers';
+import GroupsCross from './GroupsCross/GroupsCross'
 
 export default class App extends React.Component {
 
@@ -46,6 +47,9 @@ export default class App extends React.Component {
         <NavLink className={classes.NavLink} to='/parsgroupmembers'>
           Все участники групп
         </NavLink>
+        <NavLink className={classes.NavLink} to='/groupscross'>
+          Состоящие в нескольких группах
+        </NavLink>
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
@@ -59,6 +63,7 @@ export default class App extends React.Component {
         <Route path='/groupscanpost' component={GropsCanPost} exact />
         <Route path='/brobotlist' component={BroBotList} exact />
         <Route path='/parsgroupmembers' component={ParsGroupMembers} exact />
+        <Route path='/groupscross' component={GroupsCross} exact />
 
         {/* <Route path='/' component={GroupsSearch} exact /> */}
       </Switch>
