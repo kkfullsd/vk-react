@@ -9,17 +9,9 @@ let GroupsCross = props => {
 
     const [state, changeState] = useState([])
     const [output, changeOutput] = useState({})
-    const [isValid, changeIsValid] = useState(true)
     const [isLoading, changeIsLoading] = useState(false)
     const [showCount, setShowCount] = useState(false)
     const [min, setMin] = useState(2)
-
-   // let method = ['groups.getMembers', {group_id: 'club75124626', v: '5.73'}]
-
-   let groups = ['https://vk.com/vseti_rabota', 'https://vk.com/frlance', 'club58648198']
-
-
-   
 
     
    let start = async () =>{
@@ -54,10 +46,6 @@ let GroupsCross = props => {
    }
 
 
-
-
-    
-
     return (
         <div className={classes.main}>
             <div className={classes.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, он попадет в список. </div>
@@ -91,7 +79,7 @@ let GroupsCross = props => {
                     <br></br>
                     <label>Найдено участников: {Object.keys(output).length}</label>
                     <div className={classes.output}>
-                    {/* <CopyButton output={flipFlop()} /> */}
+                    <CopyButton output={showcrosses()} />
                     {showcrosses().map((str, index)=>{
                         return (
                             <div key={index} >

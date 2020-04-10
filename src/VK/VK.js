@@ -25,12 +25,14 @@ VK.call = function (method, params) {
 }
 
 VK.groupsGetMembers = async (gid, offset = 0) => {
+    if (gid.trim() == ' ' || gid.trim() === '' || gid == '\n') return []
     let response = await VK.call('groups.getMembers', {group_id: cleanURL(gid), offset:offset, v:'5.73'})
     return(response.items)
 }
 
 
 VK.groupsGetMembersCount = async (gid, offset = 0) => {
+    if (gid.trim() == ' ' || gid.trim() === '' || gid == '\n') return 0
     let response = await VK.call('groups.getMembers', {group_id: cleanURL(gid), offset:offset, v:'5.73'})
     return(response.count)
 }
@@ -55,9 +57,6 @@ VK.groupGetAllMembers = async (gid, callback) => {
 
    await iterate(0)
 
-
-//    console.log(await iterate(0))
-
 }
 
 
@@ -80,10 +79,6 @@ VK.cross = (arr, num) =>{
     
     return result
 }
-
-
-
-
 
 
 
