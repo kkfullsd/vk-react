@@ -51,6 +51,20 @@
         font-size: 14px;
         background-color: #7a91be;
     }
+    
+    input[type='number'] {
+        width: 30px;
+    }
+
+
+    label {
+        input[type='checkbox'] {
+            position: relative;
+            top: 2px;
+            height: 20px;
+            width: 20px;
+        }
+    }
 
 }
 

@@ -61,24 +61,24 @@ VK.groupGetAllMembers = async (gid, callback) => {
 }
 
 
-VK.cross = (arr) =>{
+VK.cross = (arr, num) =>{
     let result = {}
 
     arr.forEach(elem => {
-        if (result[elem]) {
+        if (result[elem] !== undefined) {
             result[elem] = result[elem] + 1
         } else {
-            result[elem] = 0
+            result[elem] = 1
         } 
     });
 
     for (let key in result) {
-        if (key = 0) {
+        if (result[key] < num) {
             delete result[key]
         }
     }  
     
-    console.log(result)
+    return result
 }
 
 
@@ -93,6 +93,8 @@ VK.cross = (arr) =>{
 let cleanURL = (data) => {
     if (data.startsWith('https://vk.com/club')) {
         return data.slice(19)
+    } else if (data.startsWith('https://vk.com/public')) {
+        return  data.slice(21)
     } else if (data.startsWith('https://vk.com/')){
         return data.slice(15)
     } else if (data.startsWith('club')){

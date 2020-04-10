@@ -8,9 +8,11 @@ let GroupsCross = props => {
     document.title = 'Пересечения групп'
 
     const [state, changeState] = useState([])
-    const [output, changeOutput] = useState([])
+    const [output, changeOutput] = useState({})
     const [isValid, changeIsValid] = useState(true)
     const [isLoading, changeIsLoading] = useState(false)
+    const [showCount, setShowCount] = useState(false)
+    const [min, setMin] = useState(2)
 
    // let method = ['groups.getMembers', {group_id: 'club75124626', v: '5.73'}]
 
@@ -30,20 +32,25 @@ let GroupsCross = props => {
         let iteration = async () => {
             if (counter < state.length) {
                 await VK.groupGetAllMembers(state[counter], (output)=>{
-                        //changeOutput(prevState=>prevState.concat(output))
                         result.push(...output)
                         counter += 1
                         console.log(counter)
                         iteration(counter)
                     })
                 } else {
+                    changeOutput(VK.cross(result, min))
                     changeIsLoading(false)
-                    VK.cross(result)
                 }
         }
         
         iteration(counter)
 
+   }
+
+   let showcrosses = () => {
+       let rend = []
+       Object.keys(output).map(id=>rend.push('https://vk.com/id' + id + (showCount ? ' : ' + output[id]  : ' ')))
+       return rend
    }
 
 
@@ -60,30 +67,38 @@ let GroupsCross = props => {
                     changeState(e.target.value.split('\n'))
                 }}
             />
+                <label>
+                Пользователь состоит не менее, чем в <input type='number' value={min} onChange={(e)=>{setMin(e.target.value)}}/> группах
+                </label>
 
+                <label>
+                    <input type='checkbox' onChange={()=>setShowCount(!showCount)}/>
+                    Показать на сколько групп подписан пользователь
+                </label>
+            
                 {isLoading? null : 
                     <button className={classes.button} onClick={()=>start()} >Начать сбор пересечений групп</button>
                 }
                 
-                 {isLoading ? 
+                 {isLoading ?   
                     <div className={loader.loader}></div> : null
                     
                 }
             
-                {output.length === 0 || isLoading ? 
+                {Object.keys(output).length === 0 || isLoading ? 
                     null :
                     <>
                     <br></br>
-                    {/* <label>Найдено участников: {flipFlop().length}</label> */}
+                    <label>Найдено участников: {Object.keys(output).length}</label>
                     <div className={classes.output}>
                     {/* <CopyButton output={flipFlop()} /> */}
-                        {output.map((id, index)=>{
-                            return(
-                                <div key={index}>
-                                    https://vk.com/id{id}
-                                </div>
-                            )
-                        })}
+                    {showcrosses().map((str, index)=>{
+                        return (
+                            <div key={index} >
+                                {str}
+                            </div>
+                        )
+                    })}
                     </div>
                     </>
                 }
