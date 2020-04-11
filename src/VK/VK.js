@@ -1,14 +1,5 @@
 let VK = {}
 
-// VK.call = (method, params, callback) => {
-//     window.VK.Api.call(method, params, (r)=>{ if (r.response) {
-//         callback(r.response)
-//         } else {
-//             callback(r.error)
-//         }
-//     })
-// }
-
 VK.call = function (method, params) {
     return new Promise((resolve, reject)=>{
         setTimeout(()=>{
@@ -80,6 +71,44 @@ VK.cross = (arr, num) =>{
     return result
 }
 
+VK.groupGetById = async (group) => {
+    console.log(group)
+   if (group.trim() == ' ' || group.trim() === '' || group == '\n') return 0
+   let q = cleanURL(group)
+   let result = await VK.call('groups.getById', {group_id: q, fields:'contacts', v:'5.73'})
+   return result
+}
+
+
+VK.getAllGroupById = async (arr, callback) => {
+    let result = []
+
+
+    let iterate = async (num) => {
+        if (num === arr.length) {
+           callback(result)
+        } else {
+            let add = await VK.groupGetById(arr[num])
+            if(add[0] !== undefined && add[0].contacts) {
+                add[0].contacts.forEach(contact=>result.push(contact))
+            }
+            iterate(num+1)
+            console.log(num)
+        }
+
+    }
+
+    iterate(0)
+        
+}
+
+VK.groupsAdmins = async (arr, callback) => {
+    await VK.getAllGroupById(arr, (result)=>{
+        callback(result)
+    })
+
+
+}
 
 
 

@@ -6,6 +6,7 @@ import GropsCanPost from './GroupsCanPost/GroupsCanPost';
 import BroBotList from './BroBotList/BroBotList'
 import ParsGroupMembers from './ParsGroupMembers/ParsGroupMembers';
 import GroupsCross from './GroupsCross/GroupsCross'
+import GroupsAdmins from './GroupsAdmins/GroupsAdmins'
 
 export default class App extends React.Component {
 
@@ -50,6 +51,9 @@ export default class App extends React.Component {
         <NavLink className={classes.NavLink} to='/groupscross'>
           Состоящие в нескольких группах
         </NavLink>
+        <NavLink className={classes.NavLink} to='/groupsadmins'>
+          Администраторы групп
+        </NavLink>
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
@@ -57,16 +61,20 @@ export default class App extends React.Component {
       }
       
 
-
-      <Switch>
+      {this.state.loginStatus == 'connected' ? <Switch>
         <Route path='/groupssearch' component={GroupsSearch} exact />
         <Route path='/groupscanpost' component={GropsCanPost} exact />
         <Route path='/brobotlist' component={BroBotList} exact />
         <Route path='/parsgroupmembers' component={ParsGroupMembers} exact />
         <Route path='/groupscross' component={GroupsCross} exact />
+        <Route path='/groupsadmins' component={GroupsAdmins} exact />
+
 
         {/* <Route path='/' component={GroupsSearch} exact /> */}
       </Switch>
+      : <div>Тут будет привлекательное описание</div>
+      }
+      
     
       
       </div>
