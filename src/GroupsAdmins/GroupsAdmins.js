@@ -45,7 +45,7 @@ let GroupsAdmins = props => {
                 
             
                 {isLoading? null : 
-                    <button className={classes.button} onClick={()=>start()} >Начать сбор администраторов групп</button>
+                    <button className={classes.button} onClick={()=>start()} >Поиск</button>
                 }
                 
                  {isLoading ?   

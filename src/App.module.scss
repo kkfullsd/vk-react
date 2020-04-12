@@ -2,14 +2,34 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color:#5679BF;
+  background-color: #f4f7fc;
+  //background: linear-gradient(to bottom, rgba(92,126,193,1) 0%, rgba(122,163,240,1) 81%, rgba(195,225,240,1) 100%);
   height: 100%;
-  padding-bottom: 100px;
+  padding-bottom: 200px;
+  padding-left: 20%;
+  padding-right: 20%;
 
   h1 {
+    display: inline;
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 100;
-    color: white;
+    color:#121212;
+  }
+
+  .logo {
+   // border: 4px solid #1E1E1E;
+    margin: 15px auto;
+    position: relative;
+    right: 35px;
+
+    img {
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      position: relative;
+      top: 15px;
+      margin-right: 5px;
+    }
   }
 }
 

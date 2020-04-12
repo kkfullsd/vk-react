@@ -31,7 +31,12 @@ export default class App extends React.Component {
 
     return (
       <div className={classes.App}>
-      <h1>VK SMM TOOLS</h1>
+
+      <div className={classes.logo}>
+        <img src='logo.png' width='40px'/>
+        <h1>VK SMM TOOLS</h1>
+      </div>
+      
        
       
       {this.state.loginStatus === 'connected' ? 
