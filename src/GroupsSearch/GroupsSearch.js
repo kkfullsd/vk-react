@@ -4,6 +4,8 @@ import CitySelect from '../ui/CitySelect/CitySelect'
 import classes from './GroupsSearch.module.scss'
 import loader from '../ui/loader/loader.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
+import styles from '../style/style.module.scss'
+
 
 export default class GroupsSearch extends React.Component {
 
@@ -252,8 +254,8 @@ export default class GroupsSearch extends React.Component {
             <div className={classes.GroupsSearch} >
 
                 <div className={classes.control}>
-                    <label htmlFor='q'>Ключевое слово или ключевые слова через запятую</label>
-                    <input className={valid} id='q' onChange={(event) => this.qHandler(event.target.value)} placeholder="Ключевое слово"/>
+                    {/* <label htmlFor='q'>Ключевые слова через запятую</label> */}
+                    <input className={valid} id='q' onChange={(event) => this.qHandler(event.target.value)} placeholder="Ключевые слова"/>
                 </div>
 
                 <div className={classes.control}>
@@ -291,16 +293,20 @@ export default class GroupsSearch extends React.Component {
                 <div className={classes.control} >
                 <label htmlFor='min'>Минимум участников:</label>
                 <input type='number' id='min' name='min' placeholder={this.state.filter.min} onChange={(event)=>this.minMaxHandler(event)} /> 
+                </div>
 
+                <div className={classes.control} >
                 <label htmlFor='max'>Максимум участников:</label>
                 <input type='number' id='max' name='max' placeholder={this.state.filter.max} onChange={(event)=>this.minMaxHandler(event)}/>
-                    
-
                 </div>
+
+                
 
                 <div className={classes.checkgroup}>
 
-                    <input type='checkbox' onChange={()=>{
+                    <input type='checkbox' 
+                    className={styles.checkbox}
+                    onChange={()=>{
                         this.setState(prevState=>{
                             prevState.filter.canPost = !prevState.filter.canPost
                             return prevState
@@ -309,12 +315,12 @@ export default class GroupsSearch extends React.Component {
                     }
                     } />
 
-                    <label htmlFor='canPost'>Только с открытой стеной</label>
+                    <label className={styles.label} htmlFor='canPost'>Только с открытой стеной</label>
                 </div>
 
                 {this.state.loading ? null : 
                     <div>
-                        <button className={classes.searchButton} onClick={this.searchGroups}> Найти группы </button>
+                        <button className={styles.button} onClick={this.searchGroups}> Найти группы </button>
                     </div>
                  }
                 

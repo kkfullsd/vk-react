@@ -6,12 +6,14 @@
     align-items: center;
 
     .control {
-        margin: 5px;
+        margin: 10px;
+
     
         label {
             display: block;
-            color: white;
             text-align: left;
+            color: #121212cc;
+            margin-bottom: 0px;
         }
 
         input {
@@ -19,14 +21,29 @@
             margin: auto;
             width: 280px;
             height: 25px;
-            border-radius: 5px;
-            outline: none;
+            border: none;
+            background-color: #f4f7fc;
+            border-radius: 0;
+            line-height: 35px;
+            font-size: 18px;
+            border-bottom: 1px solid green;
+            color: #121212cc;
+            padding: 3px;
+            
         }
 
         select{
             display: block;
             width: 280px;
             height: 25px;
+            outline: none;
+            border: 0;
+            background-color: #f4f7fc;
+            line-height: 35px;
+            font-size: 18px;
+            color: #121212cc;
+            position: relative;
+            left: -5px;
         }
 
         
@@ -46,15 +63,6 @@
         align-items: flex-start;
     }
 
-    .searchButton {
-        padding: 10px;
-        color: black;
-        background-color: #F2CA7E;
-        outline: none;
-        border-radius: 5px;
-
-    }
-
     .output {
         margin-top: 10px;
         margin-bottom: 10px;
@@ -70,7 +78,7 @@
 }
 
 .error {
-    background-color: pink;
+    background-color: pink !important;
 }
 
 .loading {
@@ -94,6 +102,6 @@
     margin: 5px;
 
     label {
-        color: white;
+        color: #121212cc;
     }
 }

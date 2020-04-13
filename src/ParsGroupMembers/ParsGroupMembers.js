@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import classes from './ParsGroupMembers.module.scss'
 import loader from '../ui/loader/loader.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
+import styles from '../style/style.module.scss'
 
 let ParsGroupMembers = props => {
 
@@ -97,16 +98,16 @@ let ParsGroupMembers = props => {
 
     return (
         <div className={classes.main}>
-            <div className={classes.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, его id будет упомянут 1 раз. </div>
-            <label htmlFor='textarea'>Список адресов сообществ по 1 ссылке на строку</label>
-            <textarea id='textarea' name='textarea' className={`${classes.textarea} ${style}`}
+            <div className={styles.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, его id будет упомянут 1 раз. </div>
+            <label className={styles.label} htmlFor='textarea'>Список адресов сообществ по 1 ссылке на строку</label>
+            <textarea id='textarea' name='textarea' className={`${styles.textarea} ${style}`}
                 onChange={(e)=>{
                     changeState(e.target.value.split('\n'))
                 }}
             />
 
                 {isLoading? null : 
-                    <button className={classes.button} onClick={()=>filter()} >Начать сбор участников групп</button>
+                    <button className={styles.button} onClick={()=>filter()} >Поиск</button>
                 }
                 
                  {isLoading ? 

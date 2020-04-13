@@ -3,6 +3,7 @@ import classes from './GroupsCross.module.scss'
 import loader from '../ui/loader/loader.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
 import VK from '../VK/VK'
+import styles from '../style/style.module.scss'
 
 let GroupsCross = props => {
     document.title = 'Пересечения групп'
@@ -48,9 +49,9 @@ let GroupsCross = props => {
 
     return (
         <div className={classes.main}>
-            <div className={classes.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, он попадет в список. </div>
-            <label htmlFor='textarea'>Список адресов сообществ по 1 ссылке на строку</label>
-            <textarea id='textarea' name='textarea' className={`${classes.textarea} HERE IS THE STYLE IF ERROR`}
+            <div className={styles.description}>Скрипт перебирает все указанные вами группы и собирает общий список подписчиков. <br/> Если пользователь состоит в нескольких группах, он попадет в список. </div>
+            <label className={styles.label} htmlFor='textarea'>Список адресов сообществ по 1 ссылке на строку</label>
+            <textarea id='textarea' name='textarea' className={`${styles.textarea} HERE IS THE STYLE IF ERROR`}
                 onChange={(e)=>{
                     changeState(e.target.value.split('\n'))
                 }}
@@ -60,12 +61,12 @@ let GroupsCross = props => {
                 </label>
 
                 <label>
-                    <input type='checkbox' onChange={()=>setShowCount(!showCount)}/>
+                    <input type='checkbox' className={styles.checkbox} onChange={()=>setShowCount(!showCount)}/>
                     Показать на сколько групп подписан пользователь
                 </label>
             
                 {isLoading? null : 
-                    <button className={classes.button} onClick={()=>start()} >Начать сбор пересечений групп</button>
+                    <button className={styles.button} onClick={()=>start()} >Поиск</button>
                 }
                 
                  {isLoading ?   

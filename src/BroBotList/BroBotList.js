@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import classes from './BroBotList.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
+import styles from '../style/style.module.scss'
 
 let BroBotList = () => {
 
@@ -27,22 +28,23 @@ let BroBotList = () => {
     return (
         <div className={classes.main}>
             <div className={classes.control}>
-            <label className={classes.label} htmlFor='groups'>Вставьте список групп</label>
-            <textarea className={classes.textarea}  onChange={(event)=>{
+            <label className={classes.label + ' ' + styles.label} htmlFor='groups'>Вставьте список групп</label>
+            <textarea className={styles.textarea}  onChange={(event)=>{
                 changeGroups(event.target.value.split('\n'))
                 
             }} id='groups' />
             </div>
 
             <div className={classes.control}>
-            <label className={classes.label}  htmlFor='phrase'>Вставьте список фраз</label>
-            <textarea className={classes.textarea}  onChange={(event)=>{
+            <label className={styles.label}  htmlFor='phrase'>Вставьте список фраз</label>
+            <textarea className={styles.textarea}  onChange={(event)=>{
                 changePhrase(event.target.value.split('\n'))
             }} id='phrase' />
             </div>
 
             <div className={classes.control}>
             <button
+            className={styles.button}
             onClick={()=>combine()}
             >Комбинировать</button>
             </div>

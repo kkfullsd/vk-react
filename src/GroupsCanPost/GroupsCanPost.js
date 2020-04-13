@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import classes from './GroupsCanPost.module.scss'
 import loader from '../ui/loader/loader.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
+import styles from '../style/style.module.scss'
 
 const GropsCanPost = () => {
 
@@ -72,12 +73,14 @@ const GropsCanPost = () => {
 
    }
 
+   let textareaClass = isValid? styles.textarea : classes.error + ' ' + styles.textarea
+
 
     return(
         <div className={classes.container}>
             <label htmlFor='initialGroups'>Вставьте группы, которые нужно отсортировать по открытой стене</label>
             <textarea 
-                className={isValid? ' ': classes.error}
+                className={textareaClass}
                 id='initialGroups'
                 name='initialGroups' 
                 onChange={event=>{
@@ -87,7 +90,7 @@ const GropsCanPost = () => {
 
                 {isLoading ? 
                     <div className={loader.loader}></div> :
-                    <button className={classes.sortButton} onClick={filterGroups} >Отсортировать</button>
+                    <button className={styles.button} onClick={filterGroups} >Отсортировать</button>
                 }
             
             

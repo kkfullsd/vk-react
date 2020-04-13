@@ -1,25 +1,14 @@
 .container {
     label {
-        color: white;
+        color: #121212cc;
         margin: 10px;
     }
     textarea {
-        display: block;
-        width: 500px;
-        height: 150px;
-        margin: 10px auto;
-        box-shadow: 12px 12px 15px -10px rgba(0,0,0,0.75);
+       margin: 15px auto;
         
     }
 
-    .sortButton {
-        padding: 10px;
-        color: black;
-        background-color: #F2CA7E;
-        outline: none;
-        border-radius: 5px;
-
-    }
+    
 
     .counter {
         color: white;
