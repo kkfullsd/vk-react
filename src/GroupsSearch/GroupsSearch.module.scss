@@ -5,6 +5,15 @@
     flex-direction: column;
     align-items: center;
 
+    .dropdownContainer {
+        width: 280px;
+        background-color: transparent;
+
+        div:first-child {
+            background: transparent;
+        }
+    }
+
     .control {
         margin: 10px;
 

@@ -5,7 +5,7 @@ import classes from './GroupsSearch.module.scss'
 import loader from '../ui/loader/loader.module.scss'
 import CopyButton from '../ui/CopyButton/CopyButton'
 import styles from '../style/style.module.scss'
-
+import Select from 'react-select';
 
 export default class GroupsSearch extends React.Component {
 
@@ -31,6 +31,15 @@ export default class GroupsSearch extends React.Component {
             max: 999999999,
         }
     }
+
+     sortOptions = [
+        {value:0, label: 'сортировать по умолчанию (аналогично результатам поиска в полной версии сайта)'},
+        {value:1, label: 'сортировать по скорости ростa'},
+        {value:2, label: 'сортировать по отношению дневной посещаемости к количеству пользователей'},
+        {value:3, label: 'сортировать по отношению дневной посещаемости к количеству пользователей'},
+        {value:4, label: 'сортировать по отношению количества комментариев к количеству пользователей'},
+        {value:5, label: 'сортировать по отношению количества записей в обсуждениях к количеству пользователей'}
+    ]
 
 
     
@@ -280,15 +289,35 @@ export default class GroupsSearch extends React.Component {
 
 
                 <div className={classes.control}>
-                    <label htmlFor='sort'>Сортировка по:</label>
-                    <select name='sort' id='sort' onChange={this.uniSelectHandler} >
+                    <label htmlFor='sort'>Сортировка по:
+                    <Select
+                        className={classes.dropdownContainer}
+                        classNamePrefix={classes.dropdown}
+
+                        options={this.sortOptions}
+                        value={
+                            this.sortOptions.filter(obj=>obj.value === this.state.param.sort)[0]
+                            }
+                        onChange={selectedOption => {
+                            let state = this.state
+                            state.param.sort = selectedOption.value
+
+                            this.setState(state)
+                        }
+                        }
+                    />
+
+                    
+                    </label>
+
+                    {/* <select name='sort' id='sort' onChange={this.uniSelectHandler} >
                         <option value='0'>сортировать по умолчанию (аналогично результатам поиска в полной версии сайта)</option>
                         <option value='1'>сортировать по скорости роста</option>
                         <option value='2'>сортировать по отношению дневной посещаемости к количеству пользователей</option>
                         <option value='3'>сортировать по отношению дневной посещаемости к количеству пользователей; </option>
                         <option value='4'>сортировать по отношению количества комментариев к количеству пользователей</option>
                         <option value='5'>сортировать по отношению количества записей в обсуждениях к количеству пользователей</option>
-                    </select>
+                    </select> */}
                 </div>
                 <div className={classes.control} >
                 <label htmlFor='min'>Минимум участников:</label>
