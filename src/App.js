@@ -7,6 +7,7 @@ import BroBotList from './BroBotList/BroBotList'
 import ParsGroupMembers from './ParsGroupMembers/ParsGroupMembers';
 import GroupsCross from './GroupsCross/GroupsCross'
 import GroupsAdmins from './GroupsAdmins/GroupsAdmins'
+import {PostsParse} from './PostsParse/PostsParse'
 
 export default class App extends React.Component {
 
@@ -59,6 +60,9 @@ export default class App extends React.Component {
         <NavLink className={classes.NavLink} to='/groupsadmins'>
           Администраторы групп
         </NavLink>
+        <NavLink className={classes.NavLink} to='/postsparse'>
+          Парс постов со стены сообщества
+        </NavLink>
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
@@ -73,6 +77,8 @@ export default class App extends React.Component {
         <Route path='/parsgroupmembers' component={ParsGroupMembers} exact />
         <Route path='/groupscross' component={GroupsCross} exact />
         <Route path='/groupsadmins' component={GroupsAdmins} exact />
+        <Route path='/postsparse' component={PostsParse} exact />
+
 
 
         {/* <Route path='/' component={GroupsSearch} exact /> */}
