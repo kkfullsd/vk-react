@@ -33,12 +33,19 @@ export default class GroupsSearch extends React.Component {
     }
 
      sortOptions = [
-        {value:0, label: 'сортировать по умолчанию (аналогично результатам поиска в полной версии сайта)'},
-        {value:1, label: 'сортировать по скорости ростa'},
-        {value:2, label: 'сортировать по отношению дневной посещаемости к количеству пользователей'},
-        {value:3, label: 'сортировать по отношению дневной посещаемости к количеству пользователей'},
-        {value:4, label: 'сортировать по отношению количества комментариев к количеству пользователей'},
-        {value:5, label: 'сортировать по отношению количества записей в обсуждениях к количеству пользователей'}
+        {value:0, label: 'Cортировать по умолчанию (аналогично результатам поиска в полной версии сайта)'},
+        {value:1, label: 'Cортировать по скорости ростa'},
+        {value:2, label: 'Cортировать по отношению дневной посещаемости к количеству пользователей'},
+        {value:3, label: 'Cортировать по отношению дневной посещаемости к количеству пользователей'},
+        {value:4, label: 'Cортировать по отношению количества комментариев к количеству пользователей'},
+        {value:5, label: 'Cортировать по отношению количества записей в обсуждениях к количеству пользователей'}
+    ]
+
+    groupTypeOptions = [
+        {value:'', label:"Не важно"},
+        {value:'group', label:"Группа"},
+        {value:'page', label:"Паблик"},
+        {value:'event', label:"Событие"},
     ]
 
 
@@ -57,6 +64,7 @@ export default class GroupsSearch extends React.Component {
     }
 
     searchGroups = () => {
+        console.log(this.state.param)
 
         if (this.state.param.q.length === 0 || this.state.param.q[0].length === 0) {
             this.setState({
@@ -79,7 +87,7 @@ export default class GroupsSearch extends React.Component {
         let p = () =>{
 
             let iterate = (counter) => {
-                window.VK.Api.call('groups.search', {q: this.state.param.q[counter], type: this.state.param.type, country_id: this.state.param.country_id, count: 1000, v:'5.73'},  (r) => {
+                window.VK.Api.call('groups.search', {q: this.state.param.q[counter], type: this.state.param.type, country_id: this.state.param.country_id, city_id:this.state.param.city_id, count: 1000, v:'5.73'},  (r) => {
                     if(r.response) {
                         r.response.items.forEach(group=>{
                             this.setState({
@@ -254,6 +262,33 @@ export default class GroupsSearch extends React.Component {
         this.setState({state})
     }
 
+
+    dropdownStyle = {
+        container: (provided, state) => ({
+            ...provided,
+            width: '285px',
+            borderColor: state.isFocused ? '#008000' : '#008000'
+        }),
+        control: (provided, state) => ({
+            ...provided,
+            backgroundColor: 'transparent',
+            borderWidth: '0',
+            borderRadius: '0',
+            borderBottom: '1px solid #008000',
+        
+        }),
+        valueContainer: (provided, state) => ({
+            ...provided,
+            paddingLeft: '0px',
+            
+        }),
+        singleValue: (provided, state) => ({
+            ...provided,
+            color: '#121212cc',
+            
+        }),
+      }
+
     
 
 
@@ -268,22 +303,56 @@ export default class GroupsSearch extends React.Component {
                 </div>
 
                 <div className={classes.control}>
-                <label htmlFor='selecttype'>Тип сообщества</label>
-                <select id='selecttype' onChange={this.uniSelectHandler} name='type'>
+                <label htmlFor='selecttype'>Тип сообщества
+                <Select 
+                    options={this.groupTypeOptions}
+                    styles={this.dropdownStyle}
+                    onChange={selectedOption => {
+                        let state = this.state
+                        state.param.type = selectedOption.value
+
+                        this.setState(state)
+                    } }
+                    value={this.groupTypeOptions.filter(obj=>obj.value === this.state.param.type)[0]}
+
+                    
+                    />
+                
+                </label>
+                {/* <select id='selecttype' onChange={this.uniSelectHandler} name='type'>
                     <option value=''>Не важно</option>
                     <option value='group' >Группа</option>
                     <option value='page'>Паблик</option>
                     <option value='event'>Событие</option>
-                </select>
+                </select> */}
                 </div>
                 
                 <div className={classes.control}>
-                    <CountrySeclect onSelect={this.uniSelectHandler} />
+                    <CountrySeclect onSelect={this.uniSelectHandler} country_id={this.state.param.country_id}
+                    onSelect={selectedOption => {
+                        let state = this.state
+                        state.param.country_id = selectedOption.value
+
+                        this.setState(state)
+                        console.log(this.state)
+                    }}
+                    />
                 </div>
 
                 {this.state.param.country_id==='' ? null : 
                     <div className={classes.control}>
-                        <CitySelect country_id={this.state.param.country_id} onSelect={this.uniSelectHandler} />
+                        <CitySelect 
+                        country_id={this.state.param.country_id} 
+                        city_id={this.state.param.city_id} 
+                        onSelect={selectedOption => {
+                            let state = this.state
+                            state.param.city_id = selectedOption.value
+    
+                            this.setState(state)
+                            console.log(this.state.param.city_id)
+                        }}
+                        
+                        />
                      </div>
                 }
 
@@ -291,13 +360,9 @@ export default class GroupsSearch extends React.Component {
                 <div className={classes.control}>
                     <label htmlFor='sort'>Сортировка по:
                     <Select
-                        className={classes.dropdownContainer}
-                        classNamePrefix={classes.dropdown}
-
+                        styles={this.dropdownStyle}
                         options={this.sortOptions}
-                        value={
-                            this.sortOptions.filter(obj=>obj.value === this.state.param.sort)[0]
-                            }
+                        value={this.sortOptions.filter(obj=>obj.value === this.state.param.sort)[0]}
                         onChange={selectedOption => {
                             let state = this.state
                             state.param.sort = selectedOption.value
@@ -309,15 +374,6 @@ export default class GroupsSearch extends React.Component {
 
                     
                     </label>
-
-                    {/* <select name='sort' id='sort' onChange={this.uniSelectHandler} >
-                        <option value='0'>сортировать по умолчанию (аналогично результатам поиска в полной версии сайта)</option>
-                        <option value='1'>сортировать по скорости роста</option>
-                        <option value='2'>сортировать по отношению дневной посещаемости к количеству пользователей</option>
-                        <option value='3'>сортировать по отношению дневной посещаемости к количеству пользователей; </option>
-                        <option value='4'>сортировать по отношению количества комментариев к количеству пользователей</option>
-                        <option value='5'>сортировать по отношению количества записей в обсуждениях к количеству пользователей</option>
-                    </select> */}
                 </div>
                 <div className={classes.control} >
                 <label htmlFor='min'>Минимум участников:</label>
