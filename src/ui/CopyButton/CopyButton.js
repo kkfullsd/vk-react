@@ -14,7 +14,11 @@ export default props => {
             if (group.screen_name) {
                 data = data + "https://vk.com/" + group.screen_name + "\n"
             } else {
-                data = data + "https://vk.com/" + group+ "\n"
+                if(group.includes('https://vk.com/')) {
+                    data = data + group + "\n"
+                } else {
+                    data = data + "https://vk.com/" + group+ "\n"
+                }
             }
         })
    

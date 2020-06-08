@@ -110,6 +110,21 @@ VK.groupsAdmins = async (arr, callback) => {
 
 }
 
+VK.getGroupPosts = async (groups, params) => {
+    let container = []
+
+    for (let group of groups) {
+        let domain = cleanURL(group)
+        let posts = await VK.call('wall.get', {domain, count: params.count, filter: params.filter, extended: 1, fields: 'screen_name',  v:'5.73'})
+        for (let item of posts.items) {
+            let url = `https://vk.com/${posts.groups[0].screen_name}?w=wall${item.from_id}_${item.id}`
+            container = container.concat(url)
+        }
+    }
+
+    return container
+}
+
 
 
 

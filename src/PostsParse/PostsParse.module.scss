@@ -30,7 +30,22 @@ $input-light-dims: calc( #{$input-height} / 2.5 );
     }
 
     label {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 10px;
         color: #121212cc;
+
+
+        input {
+            margin-left: 5px;
+        }
+    }
+
+
+    .labelSelect {
+        div {
+            margin: 0 auto;
+        }
     }
 
     .button {
@@ -87,7 +102,7 @@ $input-light-dims: calc( #{$input-height} / 2.5 );
     
     input[type='number'] {
         
-        width: 30px;
+        width: 40px;
     }
 
 
