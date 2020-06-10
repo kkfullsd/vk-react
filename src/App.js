@@ -8,6 +8,7 @@ import ParsGroupMembers from './ParsGroupMembers/ParsGroupMembers';
 import GroupsCross from './GroupsCross/GroupsCross'
 import GroupsAdmins from './GroupsAdmins/GroupsAdmins'
 import {PostsParse} from './PostsParse/PostsParse'
+import {UsersFilter} from './UsersFilter/UsersFilter'
 
 export default class App extends React.Component {
 
@@ -63,6 +64,9 @@ export default class App extends React.Component {
         <NavLink className={classes.NavLink} to='/postsparse'>
           Парс постов со стены сообщества
         </NavLink>
+        <NavLink className={classes.NavLink} to='/usersfilter'>
+          Фильтр пользователей по параметрам
+        </NavLink>
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
@@ -78,6 +82,7 @@ export default class App extends React.Component {
         <Route path='/groupscross' component={GroupsCross} exact />
         <Route path='/groupsadmins' component={GroupsAdmins} exact />
         <Route path='/postsparse' component={PostsParse} exact />
+        <Route path='/usersfilter' component={UsersFilter} exact />
 
 
 
