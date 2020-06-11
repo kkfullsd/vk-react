@@ -9,18 +9,20 @@ export default props => {
 
         let data = ''
 
-        
-        props.output.map((group)=>{
-            if (group.screen_name) {
-                data = data + "https://vk.com/" + group.screen_name + "\n"
-            } else {
-                if(group.includes('https://vk.com/')) {
-                    data = data + group + "\n"
+        if (props.output instanceof Array) {
+            props.output.map((group)=>{
+                if (group.screen_name) {
+                    data = data + "https://vk.com/" + group.screen_name + "\n"
                 } else {
-                    data = data + "https://vk.com/" + group+ "\n"
+                    if(typeof group === 'string' && group.includes('https://vk.com/')) {
+                        data = data + group + "\n"
+                    } else {
+                        data = data + "https://vk.com/" + group+ "\n"
+                    }
                 }
-            }
-        })
+            })
+        }
+        
    
         window.navigator.clipboard.writeText(data)
         .then(()=>{

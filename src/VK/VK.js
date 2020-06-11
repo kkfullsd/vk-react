@@ -125,6 +125,62 @@ VK.getGroupPosts = async (groups, params) => {
     return container
 }
 
+VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
+    let searchPool = []
+    let finalPool = []
+
+    users = users.map(user=>(cleanURL(user)))
+
+    if (users.length > 500) {
+      for (let i = 0; i < Math.floor(users.length / 500); i++) {
+        let istart = i*500;
+        let ifinish = istart+500;
+        let usersString = users.slice(istart, ifinish).join(',')
+        searchPool = searchPool.concat(usersString)
+        }  
+    } else {
+        let usersString = users.join(',')
+        searchPool.push(usersString)
+    }
+
+    for (let usersList of searchPool) {
+        const result = await VK.call('users.get', {user_ids: usersList, fields: 'sex, bdate', name_case: 'nom', v: '5.73'})
+        finalPool = finalPool.concat(result)
+        statusUpdater(finalPool.length)
+    } 
+
+    console.log(finalPool)
+
+//Фильтрация
+        if (filtersList.includes('sexFilter')) {
+            finalPool = finalPool.filter(user=>user.sex === filters.sexFilter)
+        }
+
+        if (filtersList.includes('ageFilter')) {
+            const date = new Date()
+            const currenYear = date.getFullYear()
+
+            finalPool = finalPool.filter(user=>{
+               const UserBDate = user.bdate ? user.bdate.split('.') : null
+               if (UserBDate && UserBDate[2]) {
+                   let userAge = currenYear - UserBDate[2]
+                   if (userAge > filters.minAgeFilter && userAge < filters.maxAgeFilter) {
+                       return true
+                   } else {
+                       return false
+                   }
+               } else {
+                   return false
+               }
+            })
+
+        }
+
+        console.log('final: ', finalPool)
+
+    
+}
+
 
 
 

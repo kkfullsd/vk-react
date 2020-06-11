@@ -21,7 +21,7 @@ export const Filter = (props) => {
                 {enable ? <FaMinus className={classes.plus}/> : <FaPlus className={classes.plus}/>}
             </div>
             <span>Фильтр по {props.title}</span>
-
+                
         </div>
         {enable ?
          <div className={classes.children} >
