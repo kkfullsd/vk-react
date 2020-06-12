@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import classes from './UsersFilter.module.scss'
 import styles from '../style/style.module.scss'
 import {Filter} from './Filters/Filter/Filter'
+import CountrySelect from '../ui/CoutrySelect/CountrySelect'
+import CitySelect from '../ui/CitySelect/CitySelect'
 import VK from '../VK/VK'
 
 export const UsersFilter = () => {
@@ -14,6 +16,10 @@ export const UsersFilter = () => {
     const [sexFilter, setSexFilter] = useState(0)
     const [minAgeFilter, setMinAgeFilter] = useState(0)
     const [maxAgeFilter, setMaxAgeFilter] = useState(99)
+    const [countryFilter, setCountryFilter] = useState('')
+    const [cityFilter, setCityFilter] = useState('')
+
+    console.log('city ', cityFilter)
 
 
     const startFilter = () =>{
@@ -21,6 +27,8 @@ export const UsersFilter = () => {
             sexFilter,
             minAgeFilter,
             maxAgeFilter,
+            countryFilter,
+            cityFilter,
         }
         VK.getUsers(users, filtersList, filters, statusUpdater)
     }
@@ -81,7 +89,33 @@ export const UsersFilter = () => {
                     лет
                 </label>
             </Filter>
+            
+            <Filter //ПО МЕСТОПОЛОЖЕНИЮ 'geoFilter'
+                title='местоположению'
+                name='geoFilter'
+                addFilter={addFilter}
+                delFilter={delFilter}
+            >
+                <CountrySelect
+                    onSelect={selectedValue=>{
+                        setCountryFilter(selectedValue.value)
+                    }}
+                    country_id={countryFilter}
+                />
+                <br />
+                {countryFilter ? 
+                    <CitySelect
+                    onSelect={selectedValue=>{
+                        setCityFilter(selectedValue.value)
+                    }}
+                    country_id={countryFilter}
+                    /> : null}
+                
 
+                
+               
+
+            </Filter>
 
 
             <button className={styles.button} onClick={startFilter}>Фильтровать пользователей</button>

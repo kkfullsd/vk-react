@@ -144,7 +144,7 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
     }
 
     for (let usersList of searchPool) {
-        const result = await VK.call('users.get', {user_ids: usersList, fields: 'sex, bdate', name_case: 'nom', v: '5.73'})
+        const result = await VK.call('users.get', {user_ids: usersList, fields: 'sex, bdate, country, city', name_case: 'nom', v: '5.73'})
         finalPool = finalPool.concat(result)
         statusUpdater(finalPool.length)
     } 
@@ -175,6 +175,23 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
             })
 
         }
+
+        if (filtersList.includes('geoFilter')) {
+            finalPool = finalPool.filter(user=>{
+                if (filters.cityFilter) {
+                    return user.city ? user.city.id == filters.cityFilter : false
+                }
+                if (filters.countryFilter) {
+                    return user.country ? user.country.id == filters.countryFilter : false
+                }
+                
+
+            })
+        }
+
+
+
+
 
         console.log('final: ', finalPool)
 
