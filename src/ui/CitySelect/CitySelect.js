@@ -69,11 +69,11 @@ const CitySelect = props => {
 
     useEffect(()=>{
         getCities(props)
-    }, [props.country_id])
+    }, [props.country_id, props.city_id])
 
     console.log(cities)
 
-    let citiesOptions = cities.length > 0 ? cities.map(city=>({value:city.id, label:city.title})) : []
+    let citiesOptions = cities.length > 0 ? cities.map(city=>({value:city.id, label:city.title})).concat({value: '', label: 'Не важно'}) : []
 
     //let selectValue = citiesOptions.length > 0 ? citiesOptions.filter(obj=>obj.value === props.city_id)[0] : {value: '', label: 'Не важно'}
 
@@ -84,7 +84,7 @@ const CitySelect = props => {
           options={citiesOptions}
           styles={dropdownStyle}
           //value={selectValue}
-          //value={citiesOptions.length > 0 ? citiesOptions.filter(obj=>obj.value === props.city_id)[0] : {value: '', label: 'Не важно'}}
+          value={citiesOptions.length > 0 ? citiesOptions.filter(obj=>obj.value === props.city_id)[0] : {value: '', label: 'Не важно'}}
           //defaultValue={{value: '', label: 'Не важно'}}
           onChange={props.onSelect}
         />

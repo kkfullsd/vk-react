@@ -144,7 +144,7 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
     }
 
     for (let usersList of searchPool) {
-        const result = await VK.call('users.get', {user_ids: usersList, fields: 'sex, bdate, country, city', name_case: 'nom', v: '5.73'})
+        const result = await VK.call('users.get', {user_ids: usersList, fields: 'sex, bdate, country, city, relation', name_case: 'nom', v: '5.73'})
         finalPool = finalPool.concat(result)
         statusUpdater(finalPool.length)
     } 
@@ -187,6 +187,10 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                 
 
             })
+        }
+
+        if (filtersList.includes('relationFilter')) {
+            finalPool = finalPool.filter(user=>filters.relationFilter.includes(user.relation))
         }
 
 

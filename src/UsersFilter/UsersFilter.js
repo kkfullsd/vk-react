@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import classes from './UsersFilter.module.scss'
 import styles from '../style/style.module.scss'
+import {dropdownStyle} from '../style/style'
 import {Filter} from './Filters/Filter/Filter'
 import CountrySelect from '../ui/CoutrySelect/CountrySelect'
 import CitySelect from '../ui/CitySelect/CitySelect'
 import VK from '../VK/VK'
+import {selectRelationOptions} from './selectOptions'
+import Select from 'react-select';
 
 export const UsersFilter = () => {
 
@@ -18,8 +21,7 @@ export const UsersFilter = () => {
     const [maxAgeFilter, setMaxAgeFilter] = useState(99)
     const [countryFilter, setCountryFilter] = useState('')
     const [cityFilter, setCityFilter] = useState('')
-
-    console.log('city ', cityFilter)
+    const [relationFilter, setRelationFilter] = useState([])
 
 
     const startFilter = () =>{
@@ -29,6 +31,7 @@ export const UsersFilter = () => {
             maxAgeFilter,
             countryFilter,
             cityFilter,
+            relationFilter,
         }
         VK.getUsers(users, filtersList, filters, statusUpdater)
     }
@@ -99,6 +102,7 @@ export const UsersFilter = () => {
                 <CountrySelect
                     onSelect={selectedValue=>{
                         setCountryFilter(selectedValue.value)
+                        setCityFilter('')
                     }}
                     country_id={countryFilter}
                 />
@@ -109,6 +113,7 @@ export const UsersFilter = () => {
                         setCityFilter(selectedValue.value)
                     }}
                     country_id={countryFilter}
+                    city_id={cityFilter}
                     /> : null}
                 
 
@@ -116,7 +121,31 @@ export const UsersFilter = () => {
                
 
             </Filter>
+            
+            <Filter //ПО СЕМЕЙНОМУ ПОЛОЖЕНИЮ 'relationFilter'
+                title='семейному положению'
+                name='relationFilter'
+                addFilter={addFilter}
+                delFilter={delFilter}
+            >
+                 <span>Выберите один или несколько вариантов</span>
+                 <Select
+                    //defaultValue={selectRelationOptions[0]}
+                    styles={dropdownStyle}
+                    isMulti
+                    options={selectRelationOptions}
+                    value={relationFilter.map(val=>selectRelationOptions.filter(obj=>obj.value === val)[0])}
+                    onChange={selectedValue=>{
+                        if (selectedValue) {
+                            setRelationFilter(selectedValue.map(val=>val.value))
+                        } else {
+                            setRelationFilter([])
+                        }
+                        
+                    }}
+                />
 
+            </Filter>
 
             <button className={styles.button} onClick={startFilter}>Фильтровать пользователей</button>
             <span>Пользователей собрано: {status}</span>

@@ -332,7 +332,7 @@ export default class GroupsSearch extends React.Component {
                     onSelect={selectedOption => {
                         let state = this.state
                         state.param.country_id = selectedOption.value
-
+                        state.param.city_id = ''
                         this.setState(state)
                         console.log(this.state)
                     }}
