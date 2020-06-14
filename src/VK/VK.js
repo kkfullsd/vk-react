@@ -144,7 +144,7 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
     }
 
     for (let usersList of searchPool) {
-        const result = await VK.call('users.get', {user_ids: usersList, fields: 'screen_name,sex, bdate, country, city, relation, education', name_case: 'nom', v: '5.73'})
+        const result = await VK.call('users.get', {user_ids: usersList, fields: 'screen_name,sex, bdate, country, city, relation, education, followers_count', name_case: 'nom', v: '5.73'})
         finalPool = finalPool.concat(result)
         statusUpdater(finalPool.length)
     } 
@@ -200,6 +200,18 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                 (user.faculty_name && user.faculty_name.includes(filters.eduFilter)) 
                 || 
                 (user.graduation && user.graduation.toString().includes(filters.eduFilter)))
+        }
+
+        if (filtersList.includes('followersFilter')) {
+            finalPool = finalPool.filter(user=>{
+                if (filters.minFollowersFilter < filters.maxFollowersFilter) {
+                    return user.followers_count > filters.minFollowersFilter && user.followers_count < filters.maxFollowersFilter
+                } else if (filters.minFollowersFilter === filters.maxFollowersFilter) {
+                    return user.followers_count > filters.minFollowersFilter
+                } else if (filters.minFollowersFilter > filters.maxFollowersFilter) {
+                    return user.followers_count > filters.minFollowersFilter
+                }
+            })
         }
 
 

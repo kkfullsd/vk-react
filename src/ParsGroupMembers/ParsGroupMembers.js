@@ -121,7 +121,7 @@ let ParsGroupMembers = props => {
                     <br></br>
                     <label>Найдено участников: {flipFlop().length}</label>
                     <div className={classes.output}>
-                    <CopyButton output={flipFlop()} />
+                    <CopyButton output={flipFlop().map(id=>'id'+id)} />
                         {flipFlop().map((id, index)=>{
                             return(
                                 <div key={index}>

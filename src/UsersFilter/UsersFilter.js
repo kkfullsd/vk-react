@@ -23,6 +23,9 @@ export const UsersFilter = () => {
     const [cityFilter, setCityFilter] = useState('')
     const [relationFilter, setRelationFilter] = useState([])
     const [eduFilter, setEduFilter] = useState('')
+    const [minFollowersFilter, setMinFollowersFilter] = useState(0)
+    const [maxFollowersFilter, setMaxFollowersFilter] = useState(0)
+
 
 
     const startFilter = () =>{
@@ -34,6 +37,8 @@ export const UsersFilter = () => {
             cityFilter,
             relationFilter,
             eduFilter,
+            minFollowersFilter,
+            maxFollowersFilter,
         }
         VK.getUsers(users, filtersList, filters, statusUpdater)
     }
@@ -172,7 +177,31 @@ export const UsersFilter = () => {
             placeholder='Например, МГУ'
           />
         </Filter>
+        
+        <Filter //ПО КОЛИЧЕСТВУ ПОДПИСЧИКОВ 'ageFilter'
+          title="количеству подписчиков"
+          name="followersFilter"
+          addFilter={addFilter}
+          delFilter={delFilter}
+        >
+          <label className={classes.numLabel}>
+            От
+            <input
+              type="number"
+              onChange={(e) => setMinFollowersFilter(+e.target.value)}
+              value={minFollowersFilter}
+            />
+          </label>
 
+          <label className={classes.numLabel}>
+            До
+            <input
+              type="number"
+              onChange={(e) => setMaxFollowersFilter(+e.target.value)}
+              value={maxFollowersFilter}
+            />
+          </label>
+        </Filter>
         <button className={styles.button} onClick={startFilter}>
           Фильтровать пользователей
         </button>

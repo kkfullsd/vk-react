@@ -46,6 +46,7 @@ $input-light-dims: calc( #{$input-height} / 2.5 );
 }
 
 .textarea {
+    padding: 5px;
     outline: none;
     border: 0px solid white;
     display: block;
