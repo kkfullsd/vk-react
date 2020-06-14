@@ -9,12 +9,14 @@
     .add {
         margin-right: 10px;
         cursor: pointer;
+
         .plus {
             color: darkgray;
         }
     }
 
     span {
+        text-align: left;
         line-height: 16px;
         color: #121212cc;
     }
@@ -25,7 +27,7 @@
 .children {
     text-align: left;
     color: #121212cc;
-    padding-left: 5px;
+    padding-left: 30px;
     // display: flex;
     // flex-basis: 280px;
     //width: 280px;

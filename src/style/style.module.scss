@@ -106,4 +106,19 @@ $input-light-dims: calc( #{$input-height} / 2.5 );
     color: #121212cc;
 }
 
+.textinput {
+        display: block;
+        //margin: auto;
+        width: 280px;
+        height: 25px;
+        border: none;
+        background-color: #f4f7fc;
+        border-radius: 0;
+        line-height: 35px;
+        font-size: 18px;
+        border-bottom: 1px solid green;
+        color: #121212cc;
+        padding: 3px;
+}
+
 
