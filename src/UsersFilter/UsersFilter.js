@@ -25,8 +25,9 @@ export const UsersFilter = () => {
     const [eduFilter, setEduFilter] = useState('')
     const [minFollowersFilter, setMinFollowersFilter] = useState(0)
     const [maxFollowersFilter, setMaxFollowersFilter] = useState(0)
+    const [canWriteFilter, setCanWriteFilter] = useState(1)
 
-
+    
 
     const startFilter = () =>{
         let filters = {
@@ -39,6 +40,7 @@ export const UsersFilter = () => {
             eduFilter,
             minFollowersFilter,
             maxFollowersFilter,
+            canWriteFilter,
         }
         VK.getUsers(users, filtersList, filters, statusUpdater)
     }
@@ -202,6 +204,24 @@ export const UsersFilter = () => {
             />
           </label>
         </Filter>
+       
+        <Filter //ПО ОТКРЫТЫМ ЛИЧНЫМ СООБЩЕНИЯМ 'sexFilter'
+          title="открытым сообщениям"
+          name="canWriteFilter"
+          addFilter={addFilter}
+          delFilter={delFilter}
+        >
+          <label className={classes.radiolabel}>
+            <input type="radio" name="canWrite" onChange={() => setCanWriteFilter(0)} />
+            Нельзя отправлять личные сообщения
+          </label>
+          <label className={classes.radiolabel}>
+            <input type="radio" name="canWrite" onChange={() => setCanWriteFilter(1)} />
+            Можно отправлять личные сообщения
+          </label>
+        </Filter>
+       
+       
         <button className={styles.button} onClick={startFilter}>
           Фильтровать пользователей
         </button>
