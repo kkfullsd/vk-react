@@ -144,7 +144,7 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
     }
 
     for (let usersList of searchPool) {
-        const result = await VK.call('users.get', {user_ids: usersList, fields: 'screen_name,sex, bdate, country, city, relation, education, followers_count, can_write_private_message', name_case: 'nom', v: '5.73'})
+        const result = await VK.call('users.get', {user_ids: usersList, fields: 'is_closed, screen_name,sex, bdate, country, city, relation, education, followers_count, can_write_private_message', name_case: 'nom', v: '5.89'})
         finalPool = finalPool.concat(result)
         statusUpdater(finalPool.length)
     } 
@@ -216,6 +216,10 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
 
         if (filtersList.includes('canWriteFilter')) {
             finalPool = finalPool.filter(user=>user.can_write_private_message === filters.canWriteFilter)
+        }
+
+        if (filtersList.includes('isClosedFilter')) {
+            finalPool = finalPool.filter(user=>user.is_closed === filters.isClosedFilter)
         }
 
 

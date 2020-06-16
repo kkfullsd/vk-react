@@ -26,6 +26,7 @@ export const UsersFilter = () => {
     const [minFollowersFilter, setMinFollowersFilter] = useState(0)
     const [maxFollowersFilter, setMaxFollowersFilter] = useState(0)
     const [canWriteFilter, setCanWriteFilter] = useState(1)
+    const [isClosedFilter, setIsClosedFilter] = useState(false)
 
     
 
@@ -41,6 +42,7 @@ export const UsersFilter = () => {
             minFollowersFilter,
             maxFollowersFilter,
             canWriteFilter,
+            isClosedFilter,
         }
         VK.getUsers(users, filtersList, filters, statusUpdater)
     }
@@ -165,7 +167,7 @@ export const UsersFilter = () => {
           />
         </Filter>
 
-        <Filter //ПО ПОЛУ 'eduFilter'
+        <Filter //ПО ОБРАЗОВАНИЮ 'eduFilter'
           title="по слову в названии ВУЗа, факультета, специальности"
           name="eduFilter"
           addFilter={addFilter}
@@ -220,7 +222,22 @@ export const UsersFilter = () => {
             Можно отправлять личные сообщения
           </label>
         </Filter>
-       
+        
+        <Filter //ОТКРЫТОМУ ПРОФИЛЮ 'sexFilter'
+          title="открытому профилю"
+          name="isClosedFilter"
+          addFilter={addFilter}
+          delFilter={delFilter}
+        >
+          <label className={classes.radiolabel}>
+            <input type="radio" name="isClosedFilter" onChange={() => setIsClosedFilter(false)} />
+            Только открытые профили
+          </label>
+          <label className={classes.radiolabel}>
+            <input type="radio" name="isClosedFilter" onChange={() => setIsClosedFilter(true)} />
+            Только закрытые профили
+          </label>
+        </Filter>
        
         <button className={styles.button} onClick={startFilter}>
           Фильтровать пользователей
