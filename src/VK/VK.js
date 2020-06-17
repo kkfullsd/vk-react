@@ -125,14 +125,13 @@ VK.getGroupPosts = async (groups, params) => {
     return container
 }
 
-VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
+VK.getUsers = async (users, filtersList, filters, statusUpdater, filterStatusUpdater) => {
     let searchPool = []
     let finalPool = []
-
     users = users.map(user=>(cleanURL(user)))
 
     if (users.length > 500) {
-      for (let i = 0; i < Math.floor(users.length / 500); i++) {
+      for (let i = 0; i < Math.ceil(users.length / 500); i++) {
         let istart = i*500;
         let ifinish = istart+500;
         let usersString = users.slice(istart, ifinish).join(',')
@@ -149,11 +148,11 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
         statusUpdater(finalPool.length)
     } 
 
-    console.log(finalPool)
 
 //Фильтрация
         if (filtersList.includes('sexFilter')) {
             finalPool = finalPool.filter(user=>user.sex === filters.sexFilter)
+            filterStatusUpdater(finalPool.length)
         }
 
         if (filtersList.includes('ageFilter')) {
@@ -173,6 +172,7 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                    return false
                }
             })
+            filterStatusUpdater(finalPool.length)
 
         }
 
@@ -187,10 +187,14 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                 
 
             })
+            filterStatusUpdater(finalPool.length)
+
         }
 
         if (filtersList.includes('relationFilter')) {
             finalPool = finalPool.filter(user=>filters.relationFilter.includes(user.relation))
+            filterStatusUpdater(finalPool.length)
+
         }
 
         if (filtersList.includes('eduFilter')) {
@@ -200,6 +204,8 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                 (user.faculty_name && user.faculty_name.includes(filters.eduFilter)) 
                 || 
                 (user.graduation && user.graduation.toString().includes(filters.eduFilter)))
+            filterStatusUpdater(finalPool.length)
+
         }
 
         if (filtersList.includes('followersFilter')) {
@@ -212,22 +218,23 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater) => {
                     return user.followers_count > filters.minFollowersFilter
                 }
             })
+            filterStatusUpdater(finalPool.length)
         }
 
         if (filtersList.includes('canWriteFilter')) {
             finalPool = finalPool.filter(user=>user.can_write_private_message === filters.canWriteFilter)
+            filterStatusUpdater(finalPool.length)
         }
 
         if (filtersList.includes('isClosedFilter')) {
             finalPool = finalPool.filter(user=>user.is_closed === filters.isClosedFilter)
+            filterStatusUpdater(finalPool.length)
         }
 
+        filterStatusUpdater(finalPool.length)
 
 
-
-
-
-        console.log('final: ', finalPool)
+        return finalPool
 
     
 }

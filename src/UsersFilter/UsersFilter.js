@@ -5,14 +5,20 @@ import {dropdownStyle} from '../style/style'
 import {Filter} from './Filters/Filter/Filter'
 import CountrySelect from '../ui/CoutrySelect/CountrySelect'
 import CitySelect from '../ui/CitySelect/CitySelect'
-import VK from '../VK/VK'
+import VK from '../VK/VK' 
 import {selectRelationOptions} from './selectOptions'
 import Select from 'react-select';
+import CopyButton from '../ui/CopyButton/CopyButton'
+import loader from '../ui/loader/loader.module.scss'
 
 export const UsersFilter = () => {
 
     const [users, setUsers] = useState([])
     const [status, setStatus] = useState('')
+    const [filterStatus, setFilterStatus] = useState('')
+    const [output, setOutput] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
 
     //ФИЛЬТРЫ
     const [filtersList, setFiltersList] = useState([])
@@ -30,8 +36,13 @@ export const UsersFilter = () => {
 
     
 
-    const startFilter = () =>{
-        let filters = {
+    const startFilter = async () =>{
+      if (users.length > 0) {
+        setStatus('')
+        setFilterStatus('')
+        setOutput([])
+        setIsLoading(true)
+          let filters = {
             sexFilter,
             minAgeFilter,
             maxAgeFilter,
@@ -43,12 +54,21 @@ export const UsersFilter = () => {
             maxFollowersFilter,
             canWriteFilter,
             isClosedFilter,
-        }
-        VK.getUsers(users, filtersList, filters, statusUpdater)
+          }
+
+          let result = await VK.getUsers(users, filtersList, filters, statusUpdater, filterStatusUpdater)
+          setOutput(result)
+          setIsLoading(false)
+      } 
+        
     }
 
     const statusUpdater = num => {
         setStatus(`${num}`)
+    }
+
+    const filterStatusUpdater = num => {
+        setFilterStatus(`${num}`)
     }
 
     const addFilter = filterName => {
@@ -58,6 +78,21 @@ export const UsersFilter = () => {
     const delFilter = filterName => {
         setFiltersList(filtersList.filter((elem)=>elem !== filterName))
     }
+
+    const outputRender = 
+      <div className={styles.output}>
+      <CopyButton output={output.map(usr=>'https://vk.com/'+usr.screen_name)} />
+          {output.map(usr=>{
+            return (
+              <div
+                key={usr.id}
+              >
+                https://vk.com/{usr.screen_name}
+              </div>
+            )
+          })}
+      </div>
+    
 
     return (
       <div className={classes.main}>
@@ -242,7 +277,13 @@ export const UsersFilter = () => {
         <button className={styles.button} onClick={startFilter}>
           Фильтровать пользователей
         </button>
-        <span>Пользователей собрано: {status}</span>
-      </div>
+        
+        {status ? <span>Пользователей собрано: {status}</span> : null }
+        {filterStatus ? <span>Пользователей отфильтровано: {filterStatus}</span> : null}
+
+        {isLoading ? <div className={loader.loader} />  : null}
+        
+        {output.length > 0 ? outputRender : null}
+        </div>
     );
 }
