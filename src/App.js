@@ -9,6 +9,7 @@ import GroupsCross from './GroupsCross/GroupsCross'
 import GroupsAdmins from './GroupsAdmins/GroupsAdmins'
 import {PostsParse} from './PostsParse/PostsParse'
 import {UsersFilter} from './UsersFilter/UsersFilter'
+import NavBar from './ui/NavBar/NavBar'
 
 export default class App extends React.Component {
 
@@ -43,7 +44,8 @@ export default class App extends React.Component {
       
       {this.state.loginStatus === 'connected' ? 
       <nav>
-        <NavLink className={classes.NavLink} to='/groupssearch'>
+        <NavBar />
+        {/* <NavLink className={classes.NavLink} to='/groupssearch'>
           Поиск групп по параметрам
         </NavLink>
         <NavLink className={classes.NavLink} to='/groupscanpost'>
@@ -66,7 +68,7 @@ export default class App extends React.Component {
         </NavLink>
         <NavLink className={classes.NavLink} to='/usersfilter'>
           Фильтр пользователей по параметрам
-        </NavLink>
+        </NavLink> */}
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
