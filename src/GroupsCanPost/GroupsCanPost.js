@@ -5,6 +5,7 @@ import CopyButton from '../ui/CopyButton/CopyButton'
 import styles from '../style/style.module.scss'
 
 const GropsCanPost = () => {
+    document.title = 'Сортировка групп по открытой стене'
 
    const [state, changeState] = useState([])
    const [filtered, changeFiltered] = useState([])

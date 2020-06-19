@@ -4,6 +4,7 @@ import CopyButton from '../ui/CopyButton/CopyButton'
 import styles from '../style/style.module.scss'
 
 let BroBotList = () => {
+    document.title = 'Сформировать список для БроБота'
 
    const [groups, changeGroups] = useState([])
    const [phrase, changePhrase] = useState([])

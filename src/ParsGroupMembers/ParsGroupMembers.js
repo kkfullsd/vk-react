@@ -5,6 +5,7 @@ import CopyButton from '../ui/CopyButton/CopyButton'
 import styles from '../style/style.module.scss'
 
 let ParsGroupMembers = props => {
+    document.title = 'Все участники групп'
 
     const [state, changeState] = useState([])
     const [output, changeOutput] = useState([])

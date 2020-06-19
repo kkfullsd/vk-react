@@ -12,6 +12,7 @@ import CopyButton from '../ui/CopyButton/CopyButton'
 import loader from '../ui/loader/loader.module.scss'
 
 export const UsersFilter = () => {
+    document.title = 'Фильтр пользователей по параметрам'
 
     const [users, setUsers] = useState([])
     const [status, setStatus] = useState('')

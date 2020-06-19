@@ -20,6 +20,8 @@ import {BrowserRouter } from 'react-router-dom'
 
 //   }, 0);
 
+document.title='VK SMM TOOLS'
+
 let script = document.createElement('script')
 script.src = "https://vk.com/js/api/openapi.js?162"
 document.head.append(script)

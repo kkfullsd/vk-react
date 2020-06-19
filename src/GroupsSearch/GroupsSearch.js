@@ -293,6 +293,8 @@ export default class GroupsSearch extends React.Component {
 
 
     render() {
+        document.title = 'Поиск групп по параметрам'
+
         let valid = this.state.valid ? null : classes.error
         return(
             <div className={classes.GroupsSearch} >

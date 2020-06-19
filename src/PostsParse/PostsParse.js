@@ -8,6 +8,7 @@ import loader from '../ui/loader/loader.module.scss'
 
 
 export const PostsParse = () =>{
+    document.title = 'Парс постов со стены'
 
     const [groups, setGroups] = useState([])
     const [deep, setDeep] = useState(1000)

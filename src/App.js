@@ -23,7 +23,6 @@ export default class App extends React.Component {
 
   componentDidMount() {
     window.VK.Auth.getLoginStatus((data)=>{
-      console.log(data)
       this.setState({loginStatus:data.status})
     })}
 
@@ -45,30 +44,6 @@ export default class App extends React.Component {
       {this.state.loginStatus === 'connected' ? 
       <nav>
         <NavBar />
-        {/* <NavLink className={classes.NavLink} to='/groupssearch'>
-          Поиск групп по параметрам
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/groupscanpost'>
-          Сортировка групп по открытой стене
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/brobotlist'>
-          Сформировать список для БроБота
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/parsgroupmembers'>
-          Все участники групп
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/groupscross'>
-          Состоящие в нескольких группах
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/groupsadmins'>
-          Администраторы групп
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/postsparse'>
-          Парс постов со стены сообщества
-        </NavLink>
-        <NavLink className={classes.NavLink} to='/usersfilter'>
-          Фильтр пользователей по параметрам
-        </NavLink> */}
 
       </nav> :
       <button className={classes.LoginButton} onClick={this.authVk}>Войти VK</button>
