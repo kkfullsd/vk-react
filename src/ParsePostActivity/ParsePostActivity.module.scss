@@ -1,0 +1,22 @@
+.settings {
+    width: 410px;
+    text-align: left;
+    color: #121212cc;
+    h5 {
+        margin-bottom: 10px;
+    }
+
+    label {
+        line-height: 16px;
+        margin-right: 10px;
+        input {
+            height: 16px;
+        }
+    }  
+
+    .inputNumber {
+        display: inline-block;
+        text-align: center;
+        width: 40px;
+    }
+}

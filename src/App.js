@@ -9,6 +9,7 @@ import GroupsCross from './GroupsCross/GroupsCross'
 import GroupsAdmins from './GroupsAdmins/GroupsAdmins'
 import {PostsParse} from './PostsParse/PostsParse'
 import {UsersFilter} from './UsersFilter/UsersFilter'
+import {ParsePostActivity} from './ParsePostActivity/ParsePostActivity'
 import NavBar from './ui/NavBar/NavBar'
 
 export default class App extends React.Component {
@@ -60,6 +61,7 @@ export default class App extends React.Component {
         <Route path='/groupsadmins' component={GroupsAdmins} exact />
         <Route path='/postsparse' component={PostsParse} exact />
         <Route path='/usersfilter' component={UsersFilter} exact />
+        <Route path='/parspostactivity' component={ParsePostActivity} exact />
 
 
 
