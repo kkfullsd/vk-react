@@ -240,7 +240,34 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater, filterStatusUpd
 }
 
 
+VK.parsePostActivity = async (post, activities) => {
+    let link = post.slice(post.indexOf('w=wall')+6)
+    let owner_id = Number(link.slice(0, link.indexOf('_')))
+    let item_id = Number(link.slice(link.indexOf('_')+1))
 
+    console.log(post, link, owner_id, item_id)
+    if (activities.includes('likes')) {
+    try {
+        let likers = await VK.call('likes.getList', {type: 'post', owner_id: owner_id, item_id: item_id, v:'5.110'})
+        return likers
+    } catch (error) {
+        window.alert(error.error_msg)
+    }
+    }
+}
+
+VK.parsePostsActivity = async (posts, activities) => {
+    let result = []
+
+    for (let post of posts) {
+        let items = await VK.parsePostActivity(post, activities)
+        if (items.items) {
+           result = result.concat(items.items)
+        }
+    }
+
+    console.log('result ', result)
+}
 
 
 let cleanURL = (data) => {

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import classes from './ParsePostActivity.module.scss'
 import styles from '../style/style.module.scss'
+import VK from '../VK/VK'
 
 export const ParsePostActivity = () => {
 
@@ -8,7 +9,11 @@ export const ParsePostActivity = () => {
     const [activities, setActivities] = useState(['likes'])
     const [activitiesCount, setActivitiesCount] = useState(1)
 
-    console.log(activities)
+
+    const start = async () => {
+        VK.parsePostsActivity(post, activities)
+    }
+
     return (
       <div className={styles.main}>
         <div className={styles.description}>
@@ -93,7 +98,10 @@ export const ParsePostActivity = () => {
           </div>
         </div>
 
-        <button className={styles.button}>Начать сбор</button>
+        <button 
+            className={styles.button}
+            onClick={start}
+            >Начать сбор</button>
       </div>
     );
 }
