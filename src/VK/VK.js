@@ -241,19 +241,38 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater, filterStatusUpd
 
 
 VK.parsePostActivity = async (post, activities) => {
+    let bank = []
+
     let link = post.slice(post.indexOf('w=wall')+6)
     let owner_id = Number(link.slice(0, link.indexOf('_')))
     let item_id = Number(link.slice(link.indexOf('_')+1))
 
-    console.log(post, link, owner_id, item_id)
+
     if (activities.includes('likes')) {
     try {
         let likers = await VK.call('likes.getList', {type: 'post', owner_id: owner_id, item_id: item_id, v:'5.110'})
-        return likers
+        if (likers.items) {
+            bank = bank.concat(likers.items)
+        }
     } catch (error) {
         window.alert(error.error_msg)
     }
     }
+
+    if (activities.includes('reposts')) {
+        try {
+            let reposters = await VK.call('wall.getReposts', {owner_id: owner_id, post_id: item_id, count: 1000, v:'5.110'})
+            if (reposters.profiles) {
+                bank = bank.concat(reposters.profiles.map(el=>el.id))
+            }
+        } catch (error) {
+            window.alert(error.error_msg)
+        }
+    }
+
+    return bank
+
+    
 }
 
 VK.parsePostsActivity = async (posts, activities) => {
@@ -261,8 +280,8 @@ VK.parsePostsActivity = async (posts, activities) => {
 
     for (let post of posts) {
         let items = await VK.parsePostActivity(post, activities)
-        if (items.items) {
-           result = result.concat(items.items)
+        if (items) {
+           result = result.concat(items)
         }
     }
 
