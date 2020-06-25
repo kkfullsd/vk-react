@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import classes from './NavBar.module.scss'
-import { FaUsers, FaUser, FaChevronDown, FaWrench, FaChevronUp } from 'react-icons/fa';
+import { FaUsers, FaUser, FaChevronDown, FaHeart, FaChevronUp } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom'
 import useOnclickOutside from "react-cool-onclickoutside";
 
@@ -67,8 +67,8 @@ const NavBar = () => {
         ref={ref}
         onClick={()=>setShowOthers(false)}
     >
-         <NavLink className={classes.NavLink} to='/brobotlist'>
-          Сформировать список для БроБота
+         <NavLink className={classes.NavLink} to='/parspostactivity'>
+          Собрать всю активность с поста
         </NavLink>
 
     </div>
@@ -129,8 +129,8 @@ const NavBar = () => {
                         setShowGroups(false)
                     }}
                     >
-                    <FaWrench className={classes.icon} />
-                    <span >Разное</span>
+                    <FaHeart className={classes.icon} />
+                    <span >Сбор активности</span>
                     {showOthers ? 
                     <FaChevronUp className={classes.icon}/>
                     :
