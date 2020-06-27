@@ -114,12 +114,36 @@ VK.getGroupPosts = async (groups, params) => {
     let container = []
 
     for (let group of groups) {
-        let domain = cleanURL(group)
-        let posts = await VK.call('wall.get', {domain, count: params.count, filter: params.filter, extended: 1, fields: 'screen_name',  v:'5.73'})
-        for (let item of posts.items) {
-            let url = `https://vk.com/${posts.groups[0].screen_name}?w=wall${item.from_id}_${item.id}`
-            container = container.concat(url)
+        let domain
+        let owner_id
+        let qparam
+
+        let url = cleanPostParseUrl(group)
+
+        if(typeof(url) === 'number') {
+            owner_id = url
+        } else {
+            domain = url
         }
+
+        if (domain && !owner_id) {
+            qparam = {domain, count: params.count, filter: params.filter, extended: 1, fields: 'screen_name',  v:'5.73'}
+        } else if (owner_id && !domain) {
+            qparam = {owner_id, count: params.count, filter: params.filter, extended: 1, fields: 'screen_name',  v:'5.73'}
+        } else if (domain && owner_id) {
+            qparam = {domain, owner_id, count: params.count, filter: params.filter, extended: 1, fields: 'screen_name',  v:'5.73'}
+        }
+
+        try {
+            let posts = await VK.call('wall.get', qparam)
+            for (let item of posts.items) {
+            let url = `${group}?w=wall${item.from_id}_${item.id}`
+            container = container.concat(url)
+            } 
+        } catch (error) {
+            console.log('err', error)
+        }
+        
     }
 
     return container
@@ -288,6 +312,21 @@ VK.parsePostsActivity = async (posts, activities) => {
     console.log('result ', result)
 }
 
+let cleanPostParseUrl = (data) => {
+    if (data.startsWith('https://vk.com/club')) {
+        return Number('-'+data.slice(19))
+    } else if (data.startsWith('https://vk.com/public')) {
+        return  Number('-'+data.slice(21))
+    } else if (data.startsWith('https://vk.com/group')){
+        return Number('-'+data.slice(20))
+    } else if (data.startsWith('https://vk.com/id')){
+        return Number(data.slice(17))
+    } else if (data.startsWith('https://vk.com/')){
+        return data.slice(15)
+    } else {
+        return data
+    }
+}
 
 let cleanURL = (data) => {
     if (data.startsWith('https://vk.com/club')) {

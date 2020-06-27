@@ -11,7 +11,7 @@ export const PostsParse = () =>{
     document.title = 'Парс постов со стены'
 
     const [groups, setGroups] = useState([])
-    const [deep, setDeep] = useState(1000)
+    const [deep, setDeep] = useState(100)
     const [output, setOutput] = useState([])
     const [filter, setFilter] = useState('all')
     const [isLoading, setIsLoading] = useState(false)
@@ -68,7 +68,7 @@ export const PostsParse = () =>{
                 <input 
                     type='number'
                     min={1}
-                    max={1000}
+                    max={100}
                     value={deep}
                     onChange={e=>setDeep(e.target.value)}
                     
