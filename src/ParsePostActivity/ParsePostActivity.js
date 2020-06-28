@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import classes from './ParsePostActivity.module.scss'
 import styles from '../style/style.module.scss'
 import VK from '../VK/VK'
+import loader from '../ui/loader/loader.module.scss'
 
 export const ParsePostActivity = () => {
 
@@ -9,10 +10,32 @@ export const ParsePostActivity = () => {
     const [activities, setActivities] = useState(['likes'])
     const [activitiesCount, setActivitiesCount] = useState(1)
 
+    const [output, setOutput] = useState([])
+    const [loading, setLoading] = useState(false)
+
+
 
     const start = async () => {
-        VK.parsePostsActivity(post, activities)
+      if (post.length > 0) {
+        if (output.length > 0) {
+          setOutput([])
+        }
+
+        setLoading(true)
+        let out = await VK.parsePostsActivity(post, activities, activitiesCount)
+        console.log('out', out)
+        setOutput(out)
+        setLoading(false)
+      }
+      
     }
+
+
+    const outRender = (
+      <div className={styles.output} >
+        {output ? output.map((id,index)=><div key={index} >https://vk.com/id{id}</div>) : null}
+      </div>
+    )
 
     return (
       <div className={styles.main}>
@@ -57,7 +80,7 @@ export const ParsePostActivity = () => {
             Репосты
           </label>
 
-          <label>
+          {/* <label>
             <input
               type="checkbox"
               checked={activities.includes("quiz")}
@@ -68,7 +91,7 @@ export const ParsePostActivity = () => {
               }
             />
             Участвовавшие в опросе
-          </label>
+          </label> */}
 
           <label>
             <input
@@ -102,6 +125,12 @@ export const ParsePostActivity = () => {
             className={styles.button}
             onClick={start}
             >Начать сбор</button>
+
+        {}
+        {loading ? <div className={loader.loader}/> : null}
+        { output && output.length === 0 ? null : <span>Собрано {output.length} пользователей</span>}
+        { output && output.length === 0 ? null : outRender}
+        
       </div>
     );
 }

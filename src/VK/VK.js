@@ -264,7 +264,8 @@ VK.getUsers = async (users, filtersList, filters, statusUpdater, filterStatusUpd
 }
 
 
-VK.parsePostActivity = async (post, activities) => {
+VK.parsePostActivity = async (post, activities, activitiesCount) => {
+    console.log('actvcount', activitiesCount)
     let bank = []
 
     let link = post.slice(post.indexOf('w=wall')+6)
@@ -274,7 +275,7 @@ VK.parsePostActivity = async (post, activities) => {
 
     if (activities.includes('likes')) {
     try {
-        let likers = await VK.call('likes.getList', {type: 'post', owner_id: owner_id, item_id: item_id, v:'5.110'})
+        let likers = await VK.call('likes.getList', {type: 'post', owner_id: owner_id, item_id: item_id, count: 1000, v:'5.110'})
         if (likers.items) {
             bank = bank.concat(likers.items)
         }
@@ -294,22 +295,55 @@ VK.parsePostActivity = async (post, activities) => {
         }
     }
 
-    return bank
+    if (activities.includes('authors')) {
+        try {
+            let author = await VK.call('wall.getById', {posts: link, v:'5.110'})
+            if (author[0].signer_id) {
+                bank = bank.concat(author[0].signer_id)
+            }
+        } catch (error) {
+            window.alert(error.error_msg)
+        }
+    }
+
+
+    let result = {};
+
+    bank.forEach(function(a){
+    if (result[a] != undefined)
+        ++result[a];
+    else
+        result[a] = 1;
+    });
+
+    let final = []
+
+    for (let id in result) {
+
+        if (result[id] >= activitiesCount) {
+            final = final.concat(id)
+        }
+    }
+
+
+
+    return final
 
     
 }
 
-VK.parsePostsActivity = async (posts, activities) => {
+VK.parsePostsActivity = async (posts, activities, activitiesCount) => {
     let result = []
 
     for (let post of posts) {
-        let items = await VK.parsePostActivity(post, activities)
+        let items = await VK.parsePostActivity(post, activities, activitiesCount)
         if (items) {
            result = result.concat(items)
         }
     }
 
-    console.log('result ', result)
+    return result
+
 }
 
 let cleanPostParseUrl = (data) => {
