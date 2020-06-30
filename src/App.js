@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './App.module.scss';
-import GroupsSearch from './GroupsSearch/GroupsSearch';
+import {GroupsSearch} from './GroupsSearch/GroupsSearch';
 import { Route, Switch, NavLink } from 'react-router-dom'
 import GropsCanPost from './GroupsCanPost/GroupsCanPost';
 import BroBotList from './BroBotList/BroBotList'
@@ -11,6 +11,7 @@ import {PostsParse} from './PostsParse/PostsParse'
 import {UsersFilter} from './UsersFilter/UsersFilter'
 import {ParsePostActivity} from './ParsePostActivity/ParsePostActivity'
 import NavBar from './ui/NavBar/NavBar'
+import {Description} from './Description/Description'
 
 export default class App extends React.Component {
 
@@ -62,12 +63,13 @@ export default class App extends React.Component {
         <Route path='/postsparse' component={PostsParse} exact />
         <Route path='/usersfilter' component={UsersFilter} exact />
         <Route path='/parspostactivity' component={ParsePostActivity} exact />
+        <Route path='/' component={GroupsSearch} exact />
 
 
 
         {/* <Route path='/' component={GroupsSearch} exact /> */}
       </Switch>
-      : <div>Тут будет привлекательное описание</div>
+      : < Description />
       }
       
     

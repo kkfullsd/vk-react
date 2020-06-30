@@ -346,6 +346,62 @@ VK.parsePostsActivity = async (posts, activities, activitiesCount) => {
 
 }
 
+VK.searchGroups = async (qs, params, filter) => {
+    let searchedGroups = []
+    let prefiltered = []
+
+    for (let q of qs) {
+        try {
+            let result = await VK.call('groups.search', {q, type: params.type, country_id: params.country_id, city_id: params.city_id, sort: params.sort, count: 1000, v: '5.115'})
+            searchedGroups.push(...result.items.map(item=>item.screen_name)) // В searchedGroups идут только названия
+        } catch (error) {
+            window.alert(error.error_msg)
+        } 
+    }
+
+    if (searchedGroups.length > 0) {
+        prefiltered = searchedGroups //Копия найденных групп
+
+        if (filter.canPost) {
+            let quickBase = [] //Временный массив
+            let arrOfStr = [] // Массив из строк по 500 шт
+            for (let i = 0; i < Math.ceil(prefiltered.length); i = i+500) { //
+                arrOfStr.push(prefiltered.slice(i, i+500))                  //
+            }                                                               //
+            for (let group_ids of arrOfStr) {
+                let res = await VK.call('groups.getById', {group_ids, fields: 'can_post', v:'5.115'})
+                quickBase.push(...res.filter(gr=>gr.can_post === 1).map(gr=>gr.screen_name)) //Только названия
+            }
+            prefiltered = quickBase
+        }
+
+        if (filter.minMembers > 0 || filter.maxMembers > 0) {
+            let quickBase = [] //Временный массив
+            let arrOfStr = [] // Массив из строк по 500 шт
+            for (let i = 0; i < Math.ceil(prefiltered.length); i = i+500) { //
+                arrOfStr.push(prefiltered.slice(i, i+500))                  //
+            }                                                               //
+            for (let group_ids of arrOfStr) {
+                let res = await VK.call('groups.getById', {group_ids, fields: 'members_count', v:'5.115'})
+                quickBase.push(...res.filter(
+                    gr=>gr.members_count > filter.minMembers && (filter.minMembers < filter.maxMembers ? gr.members_count < filter.maxMembers : true)
+                    ).map(gr=>gr.screen_name)) //Только названия
+            }
+            prefiltered = quickBase
+        }
+
+
+
+
+        console.log(prefiltered)
+
+
+    }
+
+}
+
+
+
 let cleanPostParseUrl = (data) => {
     if (data.startsWith('https://vk.com/club')) {
         return Number('-'+data.slice(19))
