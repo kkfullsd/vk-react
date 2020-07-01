@@ -346,7 +346,7 @@ VK.parsePostsActivity = async (posts, activities, activitiesCount) => {
 
 }
 
-VK.searchGroups = async (qs, params, filter) => {
+VK.searchGroups = async (qs, params, filter, searchedUpdater, filteredUpdater) => {
     let searchedGroups = []
     let prefiltered = []
 
@@ -357,10 +357,26 @@ VK.searchGroups = async (qs, params, filter) => {
         } catch (error) {
             window.alert(error.error_msg)
         } 
+        searchedUpdater(searchedGroups.length) //Обновление кол-ва найденных групп
     }
 
     if (searchedGroups.length > 0) {
         prefiltered = searchedGroups //Копия найденных групп
+
+        if (filter.isClosed) {
+            let quickBase = [] //Временный массив
+            let arrOfStr = [] // Массив из строк по 500 шт
+            for (let i = 0; i < Math.ceil(prefiltered.length); i = i+500) { //
+                arrOfStr.push(prefiltered.slice(i, i+500))                  //
+            }                                                               //
+            for (let group_ids of arrOfStr) {
+                let res = await VK.call('groups.getById', {group_ids, fields: 'is_closed', v:'5.115'})
+                quickBase.push(...res.filter(gr=>gr.is_closed === 0).map(gr=>gr.screen_name)) //Только названия
+            }
+            prefiltered = quickBase
+        }
+
+        filteredUpdater(prefiltered.length)
 
         if (filter.canPost) {
             let quickBase = [] //Временный массив
@@ -374,6 +390,8 @@ VK.searchGroups = async (qs, params, filter) => {
             }
             prefiltered = quickBase
         }
+
+        filteredUpdater(prefiltered.length)
 
         if (filter.minMembers > 0 || filter.maxMembers > 0) {
             let quickBase = [] //Временный массив
@@ -391,9 +409,10 @@ VK.searchGroups = async (qs, params, filter) => {
         }
 
 
+        filteredUpdater(prefiltered.length)
 
 
-        console.log(prefiltered)
+        return prefiltered
 
 
     }

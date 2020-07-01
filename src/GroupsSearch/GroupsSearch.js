@@ -11,29 +11,7 @@ import VK from '../VK/VK'
 
 export const GroupsSearch = () => {
 document.title = 'Поиск групп по параметрам'
-
-    // state = {
-    //     param: {
-    //         q: [],
-    //         type: '',
-    //         country_id: '',
-    //         city_id: '',
-    //         sort: 0,
-    //         count: 1000,
-    //         v: "5.73",
-    //     },
-    //     output: [],
-    //     loading: false,
-    //     valid: true,
-    //     counter: 0,
-    //     counter2: 0,
-    //     finalOutput: [],
-    //     filter: {
-    //         canPost: false,
-    //         min: 0,
-    //         max: 999999999,
-    //     }
-    // }
+    
 
     const [q, setQ] = useState([])
     const [type, setType] = useState('')
@@ -53,7 +31,18 @@ document.title = 'Поиск групп по параметрам'
     const [minMembers, setMinMembers] = useState(0)
     const [maxMembers, setMaxMembers] = useState(0)
 
+    const [searched, setSearched] = useState(0)
+    const [filtered, setFiltered] = useState(0)
 
+
+
+    const searchedUpdater = (num) => {
+        setSearched(num)
+    }
+
+    const filteredUpdater = (num) => {
+        setFiltered(num)
+    }
 
 
 
@@ -73,17 +62,41 @@ document.title = 'Поиск групп по параметрам'
         {value:'event', label:"Событие"},
     ]
 
-
-    const searchGroups = async () => {
+    const start = async ()=>{
+        setLoading(true)
         const params = {type, country_id, city_id, sort}
-        const filters = {canPost, minMembers, maxMembers}
-
-        VK.searchGroups(q, params, filters)
+        const filters = {canPost, minMembers, maxMembers, isClosed}
+        const res = await VK.searchGroups(q, params, filters, searchedUpdater, filteredUpdater)
+        setOutput(res)
+        setLoading(false)
     }
 
 
+    const searchGroups = async () => {
+        if (q.length > 0) {
+            if (output.length === 0) {
+               start()
+            } else {
+                setOutput([])
+                setSearched(0)
+                setFiltered(0)
 
-   // let valid = this.state.valid ? null : classes.error
+                start()
+            }
+        }
+    }
+
+    const outRender = (
+        <div className={styles.output}>
+            <CopyButton 
+                output={output}
+            />
+            {output ? output.map((gr, i)=>(
+                <div key={i}>https://vk.com/{gr}</div>
+            )) : null}
+        </div>
+    )
+
 
         return (
           <div className={classes.GroupsSearch}>
@@ -108,12 +121,6 @@ document.title = 'Поиск групп по параметрам'
                   value={groupTypeOptions.find((obj) => obj.value === type)}
                 />
               </label>
-              {/* <select id='selecttype' onChange={this.uniSelectHandler} name='type'>
-                    <option value=''>Не важно</option>
-                    <option value='group' >Группа</option>
-                    <option value='page'>Паблик</option>
-                    <option value='event'>Событие</option>
-                </select> */}
             </div>
 
             <div className={classes.control}>
@@ -203,12 +210,14 @@ document.title = 'Поиск групп по параметрам'
             )}
 
             <div>
-              {/* {this.state.finalOutput.length !== 0 &&
-              this.state.loading === false ? (
-                <h3>Всего найдено групп: {this.state.finalOutput.length} </h3>
-              ) : null} */}
+            {searched > 0 ? <p>Найденно сообществ: {searched}</p> :  null}
+            {filtered > 0 ? <p>Отфильтровано сообществ: {filtered}</p> :  null}
             </div>
 
+           {loading ? <div className={loader.loader}/> : null}
+
+           {output && output.length > 0 ? outRender : null}
+            
           </div>
         );
     

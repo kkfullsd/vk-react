@@ -108,7 +108,9 @@
     }
     display: flex;
     flex-direction: row;
+    align-self: flex-start;
     margin: 5px;
+    margin-left: 160px;
 
     label {
         color: #121212cc;
