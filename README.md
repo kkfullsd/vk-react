@@ -1,5 +1,6 @@
 Бесплатный аналог сервисов для парсинга аудитории социальной сети Вконтакте.
 На данный момент сервис умеет:
+
 **Поиск сообществ по параметрам.**
 Поможет собрать группы с целевой аудиторией или группы конкурентов.
 
@@ -22,6 +23,7 @@ ________________________________________________________________________________
 
 A free analogue of services for parsing the audience of the social network Vkontakte.
 At the moment, the service can:
+
 ** Search for communities by parameters. **
 It will help to assemble groups with the target audience or groups of competitors.
 
