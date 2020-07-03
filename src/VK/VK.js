@@ -24,7 +24,7 @@ VK.groupsGetMembers = async (gid, offset = 0) => {
 
 VK.groupsGetMembersCount = async (gid, offset = 0) => {
     if (gid.trim() == ' ' || gid.trim() === '' || gid == '\n') return 0
-    let response = await VK.call('groups.getMembers', {group_id: cleanURL(gid), offset:offset, v:'5.73'})
+    let response = await VK.call('groups.getMembers', {group_id: cleanURL(gid), offset:offset, v:'5.120'})
     return(response.count)
 }
 
@@ -420,6 +420,55 @@ VK.searchGroups = async (qs, params, filter, searchedUpdater, filteredUpdater) =
 }
 
 
+VK.iterGetMembers = async (group_id, offset) => {
+    try {
+        let res = await VK.call('groups.getMembers', {group_id, offset, sort: 'id_asc', fields: 'screen_name',  v:'5.120'})
+        return (res.items)
+    } catch (error) {
+        window.alert(error.error_msg)
+    }
+   
+}
+
+
+VK.parseGroupMembers = async (groups, currentGroupUpdater, membersCountUpdater) => {
+    let result = []
+    for (let group of groups) {
+        try {
+            let group_id = cleanURL(group)
+            currentGroupUpdater(group_id)
+            let res = await VK.call('groups.getMembers', {group_id, sort: 'id_asc', fields: 'screen_name',  v:'5.120'}) 
+            let membersCount = Number(res.count)
+            for (let i=0; i < membersCount; i=i+1000) {
+                let response = await VK.iterGetMembers(group_id, i)
+                result = result.concat(response.map(user=>user.screen_name))
+                membersCountUpdater(result.length)
+            }
+        } catch (error) {
+            window.alert(error.error_msg)
+        }   
+    }
+
+    result = [...new Set(result)]
+
+    return result
+}
+
+
+
+let cleanGroupParserUrl = data => {
+    if (data.startsWith('https://vk.com/')) {
+        return data.slice(15)
+    } else if (
+        data.startsWith('group') 
+        || data.startsWith('club')
+        || data.startsWith('public')
+    ) {
+        return data
+    } else {
+        return null
+    }
+}
 
 let cleanPostParseUrl = (data) => {
     if (data.startsWith('https://vk.com/club')) {
@@ -442,6 +491,8 @@ let cleanURL = (data) => {
         return data.slice(19)
     } else if (data.startsWith('https://vk.com/public')) {
         return  data.slice(21)
+    } else if (data.startsWith('https://vk.com/group')) {
+        return  data.slice(20)
     } else if (data.startsWith('https://vk.com/')){
         return data.slice(15)
     } else if (data.startsWith('club')){
