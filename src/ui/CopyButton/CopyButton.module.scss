@@ -1,5 +1,13 @@
 .CopyButton {
+    cursor: pointer;
     position: relative;
-    width: 250px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
+    background: white;
+    outline: none;
+    border: 1px solid gray;
+    svg {
+        width: 20px;
+        height: 20px;
+    }
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import classes from './CopyButton.module.scss'
+import {GrCopy, GrCheckmark} from 'react-icons/gr'
 
 export default props => {
 
@@ -38,8 +39,8 @@ export default props => {
         <>
         {
         isCopied ?
-        <button disabled className={classes.CopyButton}>Скопировано в буфер обмена</button> : 
-        <button onClick={copy} className={classes.CopyButton}>Скопировать все в буффер обмена</button> 
+        <button disabled className={classes.CopyButton}><GrCheckmark /></button> : 
+        <button onClick={copy} className={classes.CopyButton}><GrCopy /></button> 
         }
         
         </>
