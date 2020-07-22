@@ -1,68 +1,43 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Бесплатный аналог сервисов для парсинга аудитории социальной сети Вконтакте.
+На данный момент сервис умеет:
 
-## Available Scripts
+**Поиск сообществ по параметрам.**\
+Поможет собрать группы с целевой аудиторией или группы конкурентов.
 
-In the project directory, you can run:
+**Фильтр сообществ по открытой стене**\
+Для самых различных целей.
 
-### `npm start`
+**Парсинг участников сообществ**\
+Меньше чем за минуту скрипт соберет десятки тысяч пользователей.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Пересечения сообществ**\
+Для того чтобы найти ЦА, которая точно заинтересована в этой нише.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+**Фильтр пользователей по параметрам**\
+Фильтр по возрасту, месту жительства, СП, образованию и тд.
 
-### `npm test`
+**Сбор активности с постов**\
+Соберите всех лайкнувших, репостнувших, а так же авторов постов.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+___________________________________________________________________________________
 
-### `npm run build`
+A free analogue of services for parsing the audience of the social network Vkontakte.
+At the moment, the service can:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Search for communities by parameters**\
+It will help to assemble groups with the target audience or groups of competitors.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+**Open Wall Community Filter**\
+For a variety of purposes.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Parsing community members**\
+In less than a minute, the script will collect tens of thousands of users.
 
-### `npm run eject`
+**Community Intersections**\
+In order to find CA that is definitely interested in this niche.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Filter users by parameters**\
+Filter by age, place of residence, joint venture, education, etc.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+**Collection of activity from posts**\
+Collect all liked, reposted, as well as post authors.
