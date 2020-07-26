@@ -14,7 +14,7 @@ app.get('*', (req, res)=>{
   res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
 })
 
-let PORT = 80
+const PORT = 443
 
 async function start() {
     try {
